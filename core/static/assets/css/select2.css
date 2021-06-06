@@ -1,0 +1,18 @@
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice{
+    background-color: #0074f0;
+    border-color: #ffffff;
+    color: #fff;
+  }
+
+  .select2-container--bootstrap4 .select2-results__option--highlighted,
+  .select2-container--bootstrap4
+  .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+      color: #fff;
+      background-color: #0074f0;
+  }
+
+  .select2-container--bootstrap4 .select2-dropdown .select2-results__option[aria-selected="true"] {
+    color: #ffffff!important;
+    background-color: #0074f0!important;
+    border-top: 1px solid #ffffff;
+}

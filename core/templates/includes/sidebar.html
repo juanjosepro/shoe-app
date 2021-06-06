@@ -1,71 +1,153 @@
-    <div class="sidebar" data-color="rose" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
-      <div class="logo">
-        <a target="_blank" rel="noopener noreferrer" 
-           target="_blank" rel="noopener noreferrer" 
-           href="https://www.creative-tim.com/product/material-dashboard-django" class="simple-text logo-normal">
-          Material Django
+{% with request.resolver_match.url_name as url_name %}
+<div class="sidebar" data-color="rose" data-background-color="black" data-image="/static/assets/img/sidebar-1.jpg">
+  <div class="logo">
+    <a target="_blank" rel="noopener noreferrer" 
+        target="_blank" rel="noopener noreferrer" 
+        href="#" class="simple-text logo-normal">
+      Dashboard Shoe App
+    </a>
+  </div>
+  {% if user.is_authenticated %}
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <li class="nav-item {% if 'index' == segment %} active {% endif %}">
+        <a class="nav-link" href="/">
+          <i class="material-icons">dashboard</i>
+          <p>Dashboard</p>
         </a>
-      </div>
-      {% if user.is_authenticated %}
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="nav-item {% if 'index' == segment %} active {% endif %}">
-            <a class="nav-link" href="/">
-              <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-            <a class="nav-link" href="/page-user.html">
-              <i class="material-icons">person</i>
-              <p>User Profile</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-tables.html">
-              <i class="material-icons">content_paste</i>
-              <p>Table List</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-            <a class="nav-link" href="/categories/">
-              <i class="material-icons">content_paste</i>
-              <p>Categorias</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-typography.html">
-              <i class="material-icons">library_books</i>
-              <p>Typography</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-icons.html">
-              <i class="material-icons">bubble_chart</i>
-              <p>Icons</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-maps.html">
-              <i class="material-icons">location_ons</i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-notifications.html">
-              <i class="material-icons">notifications</i>
-              <p>Notifications</p>
-            </a>
-          </li>
+      </li>
+      <li class="nav-item {% if url_name == 'products.filter-by-name' %} active {% endif %}">
+        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
+          <i class="material-icons">dashboard</i>
+          <p>Productos
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="laravelExample">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#modalFormProduct">
+                <span class="sidebar-mini"> CP </span>
+                <span class="sidebar-normal">Crear Producto</span>
+              </a>
+            </li>
+            <hr>
+            <li class="nav-item py-0 {% if url_name == 'products.filter-by-name' %} active {% endif %}">
+              <a class="nav-link py-0 " href="#">
+                <span class="text-center">MIS PRODUCTOS</span>
+              </a>
+            </li>
+            <div x-data="getProducts()" x-init="init">
+              <template x-for="product in products" :key="product.pk">
+                <li class="nav-item">
+                  {% comment %} <a class="nav-link" href="{% url 'products.filter-by-name' ${product.fields.name} %}"> {% endcomment %}
+                  <a class="nav-link" :href="`/producto/${product.fields.name}/`">
+                      <span class="sidebar-normal" x-text="product.fields.name"></span>
+                  </a>
+                </li>
+              </template>
+            </div>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item {% if url_name == 'categories.index' %} active {% endif %}">
+        <a class="nav-link" href="{% url 'categories.index' %}">
+          <i class="material-icons">content_paste</i>
+          <p>Categorias</p>
+        </a>
+      </li>
+      {% comment %} <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'models.index' %}">
+          <i class="material-icons">content_paste</i>
+          <p>modelos</p>
+        </a>
+      </li> {% endcomment %}
+      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+        <a class="nav-link" href="/page-user.html">
+          <i class="material-icons">person</i>
+          <p>User Profile</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
+        <a class="nav-link" href="/ui-typography.html">
+          <i class="material-icons">library_books</i>
+          <p>Typography</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
+        <a class="nav-link" href="/ui-icons.html">
+          <i class="material-icons">bubble_chart</i>
+          <p>Icons</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
+        <a class="nav-link" href="/ui-maps.html">
+          <i class="material-icons">location_ons</i>
+          <p>Maps</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
+        <a class="nav-link" href="/ui-notifications.html">
+          <i class="material-icons">notifications</i>
+          <p>Notifications</p>
+        </a>
+      </li>
 
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'logout' %}" >
-              <i class="material-icons">directions_run</i>
-              <p>Logout</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-      {% endif %}
+      <li class="nav-item ">
+        <a class="nav-link" href="{% url 'logout' %}" >
+          <i class="material-icons">directions_run</i>
+          <p>Logout</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+  {% endif %}
 
-    </div>
+  {% block javascripts %}
+  <script>
+
+    function getProducts() {
+      return {
+        products: [],
+        getCookie: function(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        },
+        init: async function(){
+          const defaults = {
+              'method': 'GET',
+              'headers': new Headers({
+                'X-CSRFToken': this.getCookie('csrftoken'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              }),
+          };
+
+          fetch('/productos/', defaults)
+            .then(response => response.json())
+            .then(data => {
+              this.products = data
+            });
+        }
+      }
+    }
+    function redirect(id) {
+      console.log(id)
+      //location.href = `/categorias/id`
+    }
+  </script>
+  {% endblock javascripts %}
+</div>
+{% endwith %}

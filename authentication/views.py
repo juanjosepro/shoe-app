@@ -8,11 +8,10 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-from django.forms.utils import ErrorList
-from django.http import HttpResponse
 from .forms import LoginForm, SignUpForm
+from .decorators import login_excluded
 
+@login_excluded('/')
 def login_view(request):
     form = LoginForm(request.POST or None)
 
@@ -28,9 +27,9 @@ def login_view(request):
                 login(request, user)
                 return redirect("/")
             else:    
-                msg = 'Invalid credentials'    
+                msg = 'Credenciales invalidas'    
         else:
-            msg = 'Error validating the form'    
+            msg = 'Error al validar el formulario'    
 
     return render(request, "accounts/login.html", {"form": form, "msg" : msg})
 

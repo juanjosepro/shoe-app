@@ -21,8 +21,10 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 # load production server from .env
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
 
-# Application definition
+# Message
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
+# Application definition
 INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
@@ -32,8 +34,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'  # Enable the inner app 
+    'core',
+    'apps', # Enable the inner apps
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK='bootstrap4'
 
 X_FRAME_OPTIONS='SAMEORIGIN'
 
@@ -49,8 +55,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
-LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
+LOGIN_REDIRECT_URL = "home"   # Route defined in apps/urls.py
+LOGOUT_REDIRECT_URL = "home"  # Route defined in apps/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "core/templates")  # ROOT dir for templates
 
 TEMPLATES = [
@@ -127,3 +133,16 @@ STATICFILES_DIRS = (
 )
 #############################################################
 #############################################################
+
+# color alert whit bootstrap
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

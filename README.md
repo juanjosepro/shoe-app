@@ -12,7 +12,7 @@
 ```bash
 $ # Get the code
 $ git clone https://github.com/JuanJoseStone/shoe-app.git
-$ cd shoe-app
+$ cd shoe-apps
 $
 $ # Virtualenv modules installation (Unix based systems)
 $ virtualenv env
@@ -32,10 +32,10 @@ $
 $ # Start the application (development mode)
 $ python manage.py runserver # default port 8000
 $
-$ # Start the app - custom port
+$ # Start the apps - custom port
 $ # python manage.py runserver 0.0.0.0:<your_port>
 $
-$ # Access the web app in browser: http://127.0.0.1:8000/
+$ # Access the web apps in browser: http://127.0.0.1:8000/
 ```
 
 > Note: To use the app, please access the registration page and create a new user. After authentication, the app will unlock the private pages.
@@ -51,9 +51,9 @@ Within the download you'll find the following directories and files:
 ```bash
 < PROJECT ROOT >
    |
-   |-- core/                               # Implements app logic and serve the static assets
-   |    |-- settings.py                    # Django app bootstrapper
-   |    |-- wsgi.py                        # Start the app in production
+   |-- core/                               # Implements apps logic and serve the static assets
+   |    |-- settings.py                    # Django apps bootstrapper
+   |    |-- wsgi.py                        # Start the apps in production
    |    |-- urls.py                        # Define URLs served by all apps/nodes
    |    |
    |    |-- static/
@@ -86,7 +86,7 @@ Within the download you'll find the following directories and files:
    |    |-- views.py                       # Handles login and registration  
    |    |-- forms.py                       # Define auth forms  
    |
-   |-- app/                                # A simple app that serve HTML files
+   |-- apps/                                # A simple apps that serve HTML files
    |    |
    |    |-- views.py                       # Serve HTML pages for authenticated users
    |    |-- urls.py                        # Define some super simple routes  
@@ -94,7 +94,7 @@ Within the download you'll find the following directories and files:
    |-- requirements.txt                    # Development modules - SQLite storage
    |
    |-- .env                                # Inject Configuration via Environment
-   |-- manage.py                           # Start the app - Django default start script
+   |-- manage.py                           # Start the apps - Django default start script
    |
    |-- ************************************************************************
 ```

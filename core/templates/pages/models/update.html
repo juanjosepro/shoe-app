@@ -1,0 +1,151 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Actualizar Modelo {% endblock %}
+
+{% block stylesheets %}
+  <link href="/static/assets/css/plugins/select2.min.css" rel="stylesheet" />
+  <link href="/static/assets/css/plugins/select2-bootstrap4.min.css" rel="stylesheet" />
+  <link href="/static/assets/css/select2.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Productos</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Zapato</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">{{ model.category }}</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;"><b>{{ model.name }}</b></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Actualizar</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+  
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-8 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Actualizar Modelo</h4>
+            </div>
+            <form action="" method="POST">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="select2-purple">
+                            <div class="form-group">
+                              <label for="id_category">Categoria*</label>
+                              <input class="form-control" required type="text" disabled
+                               name="category_name" id="id_category" value="{{ model.category }}">
+                              <input type="hidden" name="category" value="{{form.category.value}}">
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                  {% for error in form.category.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                  <small class="form-text text-muted">¿A que categoria pertenecerá?</small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_name" title="{{ form.category.help_text }}">Nombre*</label>
+                              {{form.name}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                {% for error in form.name.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                {% endfor %}
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                  <small class="form-text text-muted">El nombre del modelo debe ser unico</small>
+                                </div>
+                              </div>
+
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="select2-purple">
+                            <div class="form-group">
+                              <label for="id_sizes">Tallas*</label>
+                              <select class="select2 selectmultiple"
+                                name="sizes"
+                                id="id_size"
+                                required
+                                value="{{form.sizes.value}}"
+                                multiple="multiple"
+                                data-placeholder="Selecione una o mas tallas"
+                                style="width:100%">
+                                {% for size in sizes %}
+                                  <option value="{{size.name}}"
+                                    {% if size.selected %} selected {% endif %}
+                                  >
+                                    {{size.name}}
+                                  </option>
+                                {% endfor %}
+                              </select>
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                  {% for error in form.sizes.errors %}
+                                    <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                  <small class="form-text text-muted">¿Que tallas tendra este modelo?</small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_price">Precio*</label>
+                              {{form.price}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                  {% for error in form.price.errors %}
+                                    <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                  <small class="form-text text-muted">¿Cual será el precio de este modelo?</small>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="card-footer float-right">
+                    <button type="submit" class="btn btn-warning bt-sm">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  <script src="/static/assets/js/plugins/select2.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.select2').select2({
+        theme: 'bootstrap4'
+      });
+    });
+  </script>
+{% endblock javascripts %}

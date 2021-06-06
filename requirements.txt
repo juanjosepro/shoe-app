@@ -10,3 +10,4 @@ python-decouple
 gunicorn
 whitenoise
 django-admin-interface
+django-crispy-forms

@@ -1,18 +1,18 @@
 {
-    "name": "material-dashboard-django",
+    "name": "show-app",
     "mastertemplate": "boilerplate-code-django-dashboard",
     "version": "1.0.1",
-    "description": "Template project - Django Boilerplate Code ",
+    "description": "Template project - Show App",
     "scripts": {},
     "repository": {
         "type": "git",
-        "url": "https://github.com/creativetimofficial/material-dashboard-django"
+        "url": "https://github.com/JuanJoseStone/shoe-app"
     },
     "bugs": {
-        "url": "https://github.com/creativetimofficial/material-dashboard-django/issues",
-        "email": "support@appseed.us"
+        "url": "https://github.com/JuanJoseStone/shoe-app",
+        "email": "juanjosedev@gmail.com"
     },
-    "author": "Creative-Tim / AppSeed.us",
+    "author": "Juan José Pau",
     "engines": {
         "node": ">=10.0.0"
     },

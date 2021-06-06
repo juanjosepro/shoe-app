@@ -1,0 +1,12 @@
+.errorList {
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .text-muted, .bmd-help {
+    color: #909498 !important;
+    text-align: right;
+  }

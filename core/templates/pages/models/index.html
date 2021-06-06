@@ -1,0 +1,76 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Modelos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      {% if category %}
+        <li class="breadcrumb-item"><a href="javascript:;">Productos</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">Zapatos</a></li>
+        <li class="breadcrumb-item text-capitalize active" aria-current="page">{{ category}}</li>
+      {% else %}
+        <li class="breadcrumb-item text-capitalize active" aria-current="page">Modelos</li>
+      {% endif %}
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <a href="{% url 'models.store' category %}" class="btn btn-success btn-sm">Crear Modelo</a>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Nombre</th>
+                                <th>Tallas</th>
+                                <th class="text-right">Precio</th>
+                                <th class="text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for model in entity %}
+                            <tr>
+                                <td>{{ model.category }}</td>
+                                <td class="text-uppercase">{{ model.name }}</td>
+                                <td>
+                                    <span class="badge badge-pill badge-secondary">{{ model.sizes }}</span>
+                                </td>
+                                <td class="text-right">S/. {{ model.price }}</td>
+                                <td class="td-actions text-right">
+                                    <a href="{% url 'models.update' model.name %}"
+                                        data-toggle="tooltip" data-placement="top" title="Actualizar modelo"
+                                        rel="tooltip" class="btn btn-success">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <a href="{% url 'dozens.index' model.name %}"
+                                        data-toggle="tooltip" data-placement="top" title="Ver sus docenas"
+                                        rel="tooltip" class="btn btn-info">
+                                        <i class="material-icons">add</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'paginator.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
