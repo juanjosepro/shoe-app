@@ -1,0 +1,146 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Actualizar Material {% endblock %}
+
+{% block stylesheets %}
+  <link href="/static/assets/css/plugins/select2.min.css" rel="stylesheet" />
+  <link href="/static/assets/css/plugins/select2-bootstrap4.min.css" rel="stylesheet" />
+  <link href="/static/assets/css/select2.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Material</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;"><b>{{ material.name }}</b></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Crear</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+  
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-8 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Crear Material</h4>
+            </div>
+            <form action="" method="POST">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="id_material">Material*</label>
+                                    
+                                    <input class="form-control" required type="text" disabled
+                                    name="material_name" id="id_material" value="{{ material }}">
+                                    
+                                    <input type="hidden" name="material" value="{{material.id}}">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6">
+                                            {% for error in form.material.errors %}
+                                            <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="container-add-new-element" class="form-group">
+                                    <label for="id_type">Tipo de material</label>
+                                    <select name="type" id="id_type" class="form-control">
+                                        {% for type in material.types %}
+                                        <option value="{{type}}">{{type}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            {% for error in form.types.errors %}
+                                            <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_amount">Cantidad*</label>
+                              {{form.amount}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                {% for error in form.amount.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_color">Color*</label>
+                              {{form.color}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                {% for error in form.color.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_price">Precio*</label>
+                              {{form.price}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                {% for error in form.price.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                              <label for="id_note">Nota*</label>
+                              {{form.note}}
+                              <div class="row">
+                                <div class="col-12 col-sm-6">
+                                {% for error in form.note.errors %}
+                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                                {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                </div>
+                <div class="card-footer float-right">
+                    <button type="submit" class="btn btn-success bt-sm">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

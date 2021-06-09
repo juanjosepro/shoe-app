@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for dozen in dozens %}
+                        {% for dozen in entity %}
                             <tr>
                                 <td class="text-uppercase">{{ dozen.model }}</td>
                                 <td>{{ dozen.amount }}</td>
@@ -67,6 +67,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                        {% include 'paginator.html' %}
                     </table>
                 </div>
             </div>

@@ -87,7 +87,7 @@ def update(request, name):
     for size in sizes:
         for s in model.sizes.split(','):
             if size.name.strip() == s.strip():
-                size.selected = 'hola'
+                size.selected = True
 
     data = {
         'form': ModelForm(instance=model),

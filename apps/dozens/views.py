@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import Http404
 from apps.product.models import Product
 from apps.category.models import Category
 from apps.model.models import Model
@@ -15,12 +17,20 @@ def index(request, name):
     dozens = Dozen.objects.filter(model_id = model.id)
     category = Category.objects.get(id = model.category_id)
     product = Product.objects.get(id = category.product_id)
+
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(dozens, 15)
+        dozens = paginator.page(page)
+    except:
+        raise Http404
         
     data = {
         'product': product, #for the navigation route
         'category': category, #for the navigation route
         'model': model, #for the navigation route
-        'dozens': dozens,
+        'entity': dozens,
     }
 
     return render(request, 'pages/dozens/index.html', data)

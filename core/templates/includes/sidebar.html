@@ -17,13 +17,13 @@
         </a>
       </li>
       <li class="nav-item {% if url_name == 'products.filter-by-name' %} active {% endif %}">
-        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#product" aria-expanded="true">
           <i class="material-icons">dashboard</i>
           <p>Productos
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse" id="laravelExample">
+        <div class="collapse" id="product">
           <ul class="nav">
             <li class="nav-item">
               <a class="nav-link" href="#" data-toggle="modal" data-target="#modalFormProduct">
@@ -31,18 +31,14 @@
                 <span class="sidebar-normal">Crear Producto</span>
               </a>
             </li>
-            <hr>
-            <li class="nav-item py-0 {% if url_name == 'products.filter-by-name' %} active {% endif %}">
-              <a class="nav-link py-0 " href="#">
-                <span class="text-center">MIS PRODUCTOS</span>
-              </a>
-            </li>
+            <a class="nav-link py-0">
+              <span class="text-center">MIS PRODUCTOS</span>
+            </a>
             <div x-data="getProducts()" x-init="init">
-              <template x-for="product in products" :key="product.pk">
+              <template x-for="(product, i) in products" :key="product.pk">
                 <li class="nav-item">
-                  {% comment %} <a class="nav-link" href="{% url 'products.filter-by-name' ${product.fields.name} %}"> {% endcomment %}
                   <a class="nav-link" :href="`/producto/${product.fields.name}/`">
-                      <span class="sidebar-normal" x-text="product.fields.name"></span>
+                    <span class="sidebar-normal" x-text="`${i+1}. ${product.fields.name}`"></span>
                   </a>
                 </li>
               </template>
@@ -56,12 +52,31 @@
           <p>Categorias</p>
         </a>
       </li>
-      {% comment %} <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'models.index' %}">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#inventory" aria-expanded="true">
           <i class="material-icons">content_paste</i>
-          <p>modelos</p>
+          <p>Inventario
+            <b class="caret"></b>
+          </p>
         </a>
-      </li> {% endcomment %}
+        <div class="collapse" id="inventory">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'materials.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'materials.index' %}">
+                <span class="sidebar-mini"> MAT </span>
+                <span class="sidebar-normal">Materiales</span>
+              </a>
+            </li>
+            </li>
+            <li class="nav-item {% if url_name == 'inventory.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'inventory.index' %}">
+                <span class="sidebar-mini"> INV </span>
+                <span class="sidebar-normal">Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
       <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
         <a class="nav-link" href="/page-user.html">
           <i class="material-icons">person</i>

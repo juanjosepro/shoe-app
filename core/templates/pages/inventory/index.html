@@ -1,0 +1,97 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Inventario {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item text-capitalize" aria-current="page">Inventario</li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">
+      {% if filter_by %}
+        {{filter_by}}
+      {% else %}
+        Todos
+      {% endif %}
+      </li>
+
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="{% url 'inventory.store' material.name %}" class="btn btn-success btn-sm">Agregar nuevo inventario</a>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3 ml-auto">
+            <div class="dropdown show">
+                <a class="btn btn-info btn-block dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filtrar por
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="width:100%">
+                    <a class="dropdown-item" href="{% url 'inventory.filter' material.name 'todos' %}">Todos</a>
+                    <a class="dropdown-item" href="{% url 'inventory.filter' material.name 'disponibles' %}">Disponibles</a>
+                    <a class="dropdown-item" href="{% url 'inventory.filter' material.name 'vendidos' %}">Vendidos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Color</th>
+                                <th>Tipo material</th>
+                                <th>Precio</th>
+                                <th class="text-right">Fecha Creación</th>
+                                <th class="text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for inventory in entity %}
+                            <tr>
+                                <td class="text-uppercase">{{ inventory.material }}</td>
+                                {% if inventory.amount == 0 %}
+                                    <td><span class="badge badge-pill badge-danger px-3">{{ inventory.amount }}</span></td>
+                                {% else %}
+                                    <td><span class="badge badge-pill badge-success px-3">{{ inventory.amount }}</span></td>
+                                {% endif %}
+                                <td>{{ inventory.color }}</td>
+                                <td>{{ inventory.type }}</td>
+                                <td class="text-right">S/. {{ inventory.price }}</td>
+                                <td class="text-right">{{ inventory.created_at }}</td>
+                                <td class="td-actions text-right">
+                                    <a href="{% url 'inventory.update' inventory.id %}"
+                                        data-toggle="tooltip" data-placement="top" title="Actualizar"
+                                        rel="tooltip" class="btn btn-success">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <a href="#"
+                                        data-toggle="tooltip" data-placement="top" title="Ver sus docenas"
+                                        rel="tooltip" class="btn btn-info">
+                                        <i class="material-icons">add</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'paginator.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}
