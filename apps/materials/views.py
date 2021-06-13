@@ -4,7 +4,7 @@ from .models import Material
 from .forms import MaterialForm
 from django.contrib import messages
 
-# Create your views here.
+
 @login_required(login_url="/login/")
 def index(request):
     materials = Material.objects.all()

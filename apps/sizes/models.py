@@ -6,8 +6,8 @@ class Sizes(models.Model):
     product = models.ForeignKey(Product, related_name='sizes', on_delete=models.PROTECT, blank=False, verbose_name='Producto')
     name = models.CharField(max_length=30, unique=True,  blank=False, verbose_name='Nombre')
     note = models.TextField(max_length=255, null=True, verbose_name='Nota')
-    created_at = models.DateField(auto_now=True)
-
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
     class Meta:
         db_table = 'sizes'
 

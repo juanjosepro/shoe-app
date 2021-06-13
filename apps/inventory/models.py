@@ -9,7 +9,8 @@ class Inventory(models.Model):
     type = models.CharField(max_length=250, null=False, blank=False, verbose_name='Tipo de material')
     price = models.DecimalField(max_digits=5, decimal_places=2, null=False, blank=False, verbose_name='Tipo de material')
     note = models.TextField(max_length=255, null=True, blank=False, verbose_name='Nota')
-    created_at = models.DateField(auto_now=True, verbose_name='Fecha de creacion')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creacion')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
 
     class Meta:
         db_table = 'inventory'

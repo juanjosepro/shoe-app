@@ -1,0 +1,95 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Docenas {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Productos</a></li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">{{product}}</a></li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">{{category}}</a></li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">{{ model}}</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+
+    <div class="row">
+        <form  action="{% url 'sales.summary_of_selected_items' %}" method="POST" style="width:100%">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 ml-3">
+                    <a href="{% url 'dozens.store' model %}" class="btn btn-success btn-sm">Agregar nueva docena</a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 ml-auto mr-3">
+                    <button type="submit" class="btn btn-success btn-sm btn-block">Vender</button>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Modelo</th>
+                                        <th>Cantidad</th>
+                                        <th>Color</th>
+                                        <th>Talla</th>
+                                        <th>Material</th>
+                                        <th>Estado</th>
+                                        <th class="text-right">Fecha creación</th>
+                                        <th class="text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for dozen in entity %}
+                                    <tr>
+                                        {% if dozen.status == "disponible" %}
+                                        <td><input type="checkbox" name="dozens[]" value="{{ dozen.id }}" aria-label="Checkbox for following text input"></td>
+                                        {% else %}
+                                        <td><input type="checkbox" name="dozens[]" value="{{ dozen.id }}" disabled aria-label="Checkbox for following text input"></td>
+                                        {% endif %}
+                                        <td class="text-uppercase">{{ dozen.model }}</td>
+                                        <td>{{ dozen.amount }}</td>
+                                        <td>{{ dozen.color }}</td>
+                                        <td>{{ dozen.sizes }}</td>
+                                        <td>{{ dozen.material }}</td>
+                                        {% if dozen.status == "disponible" %}
+                                            <td><span class="badge badge-pill badge-success">{{ dozen.status }}</span></td>
+                                        {% else %}
+                                            <td><span class="badge badge-pill badge-primary">{{ dozen.status }}</span></td>
+                                        {% endif %}
+                                        <td class="text-right">{{ dozen.created_at }}</td>
+                                        <td class="td-actions text-right">
+                                            <a href="{% url 'dozens.update' dozen.id %}"
+                                                data-toggle="tooltip" data-placement="top" title="Editar docena"
+                                                rel="tooltip" class="btn btn-success">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                            <button type="button" rel="tooltip" class="btn btn-danger"
+                                                data-toggle="tooltip" data-placement="top" title="Working...">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% include 'paginator.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

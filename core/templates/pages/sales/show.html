@@ -1,0 +1,143 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Detalle de ventas {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Venta</a></li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">Historial de ventas</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12 py-0">
+            <h3 class="my-0">Historial de ventas de <b class="text-capitalize">{{customer}}</b></h3>
+            <div id="accordion">
+                {% for dozen in dozens %}
+                <div class="card my-1">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link font-weight-bold" data-toggle="collapse" data-target="#-{{dozen.id}}" aria-expanded="true" aria-controls="-{{dozen.id}}">
+                                {% if dozen.owe_money %}
+                                    <i class="material-icons text-warning">error</i>
+                                {% else %}
+                                    <i class="material-icons text-success">done</i>
+                                {% endif %}
+                                Venta del {{dozen.title}}
+                            </button>
+                            <button class="btn btn-default float-right btn-sm">Precio total de la venta: S/ <b>{{dozen.total_price}}</b></button>
+                            <button class="btn btn-purple float-right btn-sm">Docenas vendidas: <b>{{dozen.number_of_dozens}}</b></button>
+                        </h5>
+                    </div>
+
+                    <div id="-{{dozen.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-header py-0 border">
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-md-4">
+                                    <div class="card-title ml-2" style="font-size:13px">
+                                        Nota sobre la venta: <b class="text-lowercase">{{dozen.note}}</b>
+                                    </div>
+                                    <div class="card-title ml-2" style="font-size:13px">
+                                        Tipo de pago : <b class="text-capitalize">{{dozen.status}}</b>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4 col-md-4">
+                                    <div>
+                                        {% if dozen.owe_money %}
+                                            <div class="card-title ml-2" style="font-size:13px">El cliente solo pagó:  
+                                                <span class="badge badge-pill badge-info pt-1">
+                                                S/ {{ dozen.money_paid }}
+                                                </span>
+                                            </div>
+                                            <div class="card-title ml-2" style="font-size:13px">Y debe: 
+                                                <span class="badge badge-pill badge-danger pt-1">
+                                                S/ {{ dozen.total_money_owed }}
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="card-title ml-2" style="font-size:13px"> 
+                                                El cliente <span class="badge badge-pill badge-success pt-1">NO DEBE</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if dozen.owe_money %}
+                                <div class="col-12 col-sm-4 col-md-4 border mb-1">
+                                    <form action="{% url 'sales.update'  dozen.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group my-0 pb-0" x-data="{show: false}">
+                                            <label for="money_paid">¿Desea cancelar la cantidad que debe? </label>
+                                            <div class="d-flex justify-content-between">
+                                            <div class="form-check">
+                                                <input type="radio" name="money_paid" id="exampleRadios1" @click="show = false">
+                                                <label for="exampleRadios1" @click="show = false">
+                                                Si todo
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="money_paid" id="exampleRadios2" @click="show = true">
+                                                <label for="exampleRadios2" @click="show = true">
+                                                Solo una cantidad
+                                                </label>
+                                            </div>
+                                            </div>
+                                            <div class="form-group mt-2" x-show="show">
+                                                <label for="just_a_quantity">Ingrese la cantidad: </label>  
+                                                <input type="number" name="just_a_quantity" id="id_just_a_quantity" class="form-control">
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-warning btn-sm float-right" type="submit">Actualizar</button>
+                                    </form>
+                                </div>
+                                {% else %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body py-0 border">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Modelo</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>Color</th>
+                                            <th>Talla</th>
+                                            <th>Material</th>
+                                            <th class="text-right">Nota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for dozen in dozen.data %}
+                                        <tr>
+                                            <td class="text-uppercase">{{ dozen.model }}</td>
+                                            <td>{{ dozen.model.price }}</td>
+                                            <td>{{ dozen.amount }}</td>
+                                            <td>{{ dozen.color }}</td>
+                                            <td>{{ dozen.sizes }}</td>
+                                            <td>{{ dozen.material }}</td>
+                                            <td class="text-right">{{ dozen.note }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -4,7 +4,8 @@ from django.db import models
 class Material(models.Model):
     name = models.CharField(max_length=30, unique=True, null=False, blank=False, verbose_name='Nombre')
     types = models.CharField(max_length=250, null=False, blank=False, verbose_name='Tipos')
-
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creacion')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
     class Meta:
         db_table = 'materials'
 

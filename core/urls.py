@@ -10,6 +10,8 @@ urlpatterns = [
     path("", include("apps.dozens.urls")),
     path("", include("apps.materials.urls")),
     path("", include("apps.inventory.urls")),
+    path("", include("apps.providers_and_customers.urls")),
+    path("", include("apps.sales.urls")),
     path("", include("apps.urls")),            # UI Kits Html files
 
 ]

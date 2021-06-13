@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Ventas {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item text-capitalize" aria-current="page">Ventas</li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">
+      {% if filter_by %}
+        {{filter_by}}
+      {% else %}
+        Todos
+      {% endif %}
+      </li>
+
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3 ml-auto">
+            <div class="dropdown show">
+                <a class="btn btn-secondary btn-block btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filtrar por
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="width:100%">
+                    <a class="dropdown-item" href="{% url 'sales.filter' 'todos' %}">Todos</a>
+                    <a class="dropdown-item" href="{% url 'sales.filter' 'estado-de-pago-completo' %}">Estado de pago "Completo"</a>
+                    <a class="dropdown-item" href="{% url 'sales.filter' 'estado-de-pago-incompleto' %}">Estado de pago "Incompleto"</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Clente</th>
+                                    <th>Docenas vendidas</th>
+                                    <th>Precio</th>
+                                    <th>Tipo de pago</th>
+                                    <th>Estado de pago</th>
+                                    <th>Fecha Creación</th>
+                                    <th class="text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for sale in entity %}
+                                <tr>
+                                    <td class="text-capitalize">{{ sale.customer }}</td>
+                                    <td><span class="badge badge-pill badge-warning px-3">{{ sale.number_of_dozens }}</span></td>
+                                    <td>S/ {{ sale.total_price }}</td>
+                                    <td>{{ sale.status }}</td>
+                                    {% if sale.total_money_owed %}
+                                        <td><span class="badge badge-pill badge-danger px-3">Debe</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-pill badge-success px-3">Completo</span></td>
+                                    {% endif %}
+                                    <td>{{ sale.created_at }}</td>
+                                    <td class="td-actions text-right">
+                                        <a href="{% url 'sales.show' sale.customer.id %}"
+                                            data-toggle="tooltip" data-placement="top" title="Ver historial"
+                                            rel="tooltip" class="badge badge-pill badge-secondary px-3 py-1">
+                                            Ver Historial
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% include 'paginator.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

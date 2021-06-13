@@ -1,6 +1,7 @@
 from django.db import models
+from django.db.models.deletion import PROTECT
 from apps.category.models import Category
-
+from apps.sizes.models import Sizes
 class Model(models.Model):
     
     category = models.ForeignKey(
@@ -17,22 +18,37 @@ class Model(models.Model):
         verbose_name='Nombre',
         help_text='Nombre del modelo',
     )
-    sizes = models.CharField(
-        max_length=120,
+    sizes = models.ManyToManyField(
+        Sizes,
+        through='SizesAndModels',
         blank=False,
         verbose_name='Tallas',
         help_text='¿Que tallas va  a tener este modelo?',
     )
-    price = models.DecimalField(
-        max_digits=5,
-        blank=False,
-        decimal_places=2,
-        verbose_name='Precio',
-        help_text='Precio de este modelo',
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
 
     class Meta:
         db_table = 'models'
 
     def __str__(self):
         return self.name
+
+class SizesAndModels(models.Model):
+    size = models.ForeignKey(Sizes, on_delete=PROTECT, null=False, blank=False)
+    model = models.ForeignKey(Model,on_delete=PROTECT, null=False, blank=False)
+    price = models.DecimalField(
+        max_digits=5,
+        blank=False,
+        decimal_places=2,
+        verbose_name='Precio',
+        help_text='Precio de este talla',
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
+
+    class Meta:
+        db_table = 'sizes_and_models_pivot'
+
+    def __str__(self):
+        return str(self.id)

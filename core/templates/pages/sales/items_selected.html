@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Docenas Seleccionadas {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="javascript:;">Venta</a></li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">Docenas Seleccionadas</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% block content %}
+
+    <div class="row">
+        <form  action="{% url 'sales.confirm_selected_items' %}" method="POST" style="width:100%">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 ml-auto mr-3">
+                    <button type="submit" class="btn btn-success btn-sm btn-block">Confirmar docenas a vender</button>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Seleccionar</th>
+                                    <th>Modelo</th>
+                                    <th>Cantidad</th>
+                                    <th>Color</th>
+                                    <th>Talla</th>
+                                    <th>Material</th>
+                                    <th>Estado</th>
+                                    <th class="text-right">Fecha creación</th>
+                                    <th class="text-right">Nota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for dozen in dozens %}
+                                <tr>
+                                    {% if dozen.status == "disponible" %}
+                                    <td><input type="checkbox" checked name="dozens[]" value="{{ dozen.id }}" aria-label="Checkbox for following text input"></td>
+                                    {% endif %}
+                                    <td class="text-uppercase">{{ dozen.model }}</td>
+                                    <td>{{ dozen.amount }}</td>
+                                    <td>{{ dozen.color }}</td>
+                                    <td>{{ dozen.sizes }}</td>
+                                    <td>{{ dozen.material }}</td>
+                                    {% if dozen.status == "disponible" %}
+                                        <td><span class="badge badge-pill badge-success">{{ dozen.status }}</span></td>
+                                    {% endif %}
+                                    <td class="text-right">{{ dozen.created_at }}</td>
+                                    <td class="text-right">{{ dozen.note }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -74,25 +74,37 @@
                 <span class="sidebar-normal">Inventario</span>
               </a>
             </li>
+            <li class="nav-item {% if url_name == 'dozens.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.index' %}">
+                <span class="sidebar-mini"> DOC </span>
+                <span class="sidebar-normal">Docenas</span>
+              </a>
+            </li>
           </ul>
         </div>
+      </li>
+      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'providers.show' 'proveedor' 'todos' %}">
+          <i class="material-icons">library_books</i>
+          <p>Proveedores</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'customers.show' 'cliente'  'todos' %}">
+          <i class="material-icons">library_books</i>
+          <p>Clientes</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'sales.index'%}">
+          <i class="material-icons">bubble_chart</i>
+          <p>Ventas</p>
+        </a>
       </li>
       <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
         <a class="nav-link" href="/page-user.html">
           <i class="material-icons">person</i>
           <p>User Profile</p>
-        </a>
-      </li>
-      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-typography.html">
-          <i class="material-icons">library_books</i>
-          <p>Typography</p>
-        </a>
-      </li>
-      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-icons.html">
-          <i class="material-icons">bubble_chart</i>
-          <p>Icons</p>
         </a>
       </li>
       <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">

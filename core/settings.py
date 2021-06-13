@@ -36,6 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'apps', # Enable the inner apps
+    'apps.product',
+    'apps.sizes',
+    'apps.category',
+    'apps.model',
+    'apps.dozens',
+    'apps.materials',
+    'apps.inventory',
+    'apps.providers_and_customers',
+    'apps.sales',
     'crispy_forms',
 ]
 

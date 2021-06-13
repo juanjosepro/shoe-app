@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import Http404
 from apps.category.models import Category
+from apps.sizes.models import Sizes
 from .models import Model
 from .forms import ModelForm
 
@@ -24,6 +25,15 @@ def index(request):
 def show(request, name):
     category = get_object_or_404(Category, name = name)
     models = Model.objects.filter(category_id = category.id)
+    for m in models:
+        print(m.name)
+        print(m.sizesandmodels_set.all())
+        s = m.sizes.all()
+        print(s)
+        for sa in s:
+            print(sa)
+            
+
     page = request.GET.get('page', 1)
 
     try:
@@ -55,23 +65,29 @@ def store(request, name):
     }
 
     if request.method == 'POST':
-        #multiselect - convert an list to a comma separated string
-        sizes = ", ".join(request.POST.getlist('sizes'))
+        sizes = request.POST.getlist('sizes')
+        prices = request.POST.getlist('price')
+        pivote = []
+        
+        if len(sizes) == len(prices):
+            for i in range(len(sizes)):
+                pivot = {}
+                pivot['size'] = sizes[i]
+                pivot['price'] = prices[i]
+                pivote.append(pivot)
 
-        formulario = ModelForm(data={
-            'category': request.POST['category'],
-            'name': request.POST['name'],
-            'sizes': sizes,
-            'price': request.POST['price'],
-        })
+        model = Model.objects.create(
+            category_id = request.POST['category'],
+            name = request.POST['name'],
+        )
+        model.save()
 
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Modelo creado satisfactoriamente')
-            return redirect(to="models.show", id = category.id)
-        else:
-            data['form'] = formulario
-            messages.error(request, 'Error al crear el modelo')
+        for m in pivote:
+            size = Sizes.objects.get(id = m['size'])
+            model.sizes.add(size, through_defaults={'price': m['price']})
+
+        messages.success(request, 'Modelo creado satisfactoriamente')
+        return redirect(to="models.show", name = category.name)
 
     return render(request, 'pages/models/create.html', data)
 
@@ -79,15 +95,14 @@ def store(request, name):
 @login_required(login_url="/login/")
 def update(request, name):
     model = get_object_or_404(Model, name = name)
+    model.all_your_sizes = model.sizesandmodels_set.all()
+    print(model.all_your_sizes)
+
     #get all sizes for this product
     sizes = model.category.product.sizes.all()
 
     # I bring all the sizes and I see which ones coincide with
     # those of the created model and I create a new property for it to be selected
-    for size in sizes:
-        for s in model.sizes.split(','):
-            if size.name.strip() == s.strip():
-                size.selected = True
 
     data = {
         'form': ModelForm(instance=model),
@@ -106,10 +121,9 @@ def update(request, name):
         
         if formulario.is_valid():
             formulario.save()
-            category_id = formulario['category'].value()
             messages.success(request, 'Modelo actualizado satisfactoriamente')
             
-            return redirect(to="models.show", id = category_id)
+            return redirect(to="models.show", name = model.category)
         else:
             data['form'] = formulario
             messages.error(request, 'Error no se pudo actualizar el modelo')

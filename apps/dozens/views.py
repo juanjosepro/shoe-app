@@ -11,7 +11,51 @@ from  django.contrib import messages
 
 
 @login_required(login_url="/login/")
-def index(request, name):
+def index(request):
+    dozens = Dozen.objects.all()
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(dozens, 40)
+        dozens = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'entity': dozens,
+        'paginator': paginator,    
+    }
+    return render(request, 'pages/dozens/index.html', data)
+
+
+@login_required(login_url="/login/")
+def filter(request, filter):
+    dozens = None
+    if filter == 'todos':
+        dozens = Dozen.objects.all().order_by('-created_at')
+    if filter == 'disponibles':
+        dozens = Dozen.objects.filter(status = 'disponible').order_by('-created_at')
+    if filter == 'vendidos':
+        dozens = Dozen.objects.filter(status = 'vendido').order_by('-created_at')
+
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(dozens, 15)
+        dozens = paginator.page(page)
+    except:
+        raise Http404
+    
+    data = {
+        'entity': dozens,
+        'paginator': paginator,
+        'filter_by': filter,
+    }
+    return render(request, 'pages/dozens/index.html', data)
+
+
+@login_required(login_url="/login/")
+def show(request, name):
     model = get_object_or_404(Model, name = name)
 
     dozens = Dozen.objects.filter(model_id = model.id)
@@ -31,9 +75,10 @@ def index(request, name):
         'category': category, #for the navigation route
         'model': model, #for the navigation route
         'entity': dozens,
+        'paginator': paginator,
     }
 
-    return render(request, 'pages/dozens/index.html', data)
+    return render(request, 'pages/dozens/show.html', data)
 
 
 @login_required(login_url="/login/")
@@ -56,7 +101,7 @@ def store(request, name):
             formulario.save()
             messages.success(request, 'Docena agregada satisfactoriamente')
             
-            return redirect(to="dozens.index", id = formulario['model'].value())
+            return redirect(to="dozens.show", name = model.name)
         else:
             data['form'] = formulario
             messages.error(request, 'Error al agregar la docena')
@@ -80,10 +125,9 @@ def update(request, id):
 
         if formulario.is_valid():
             formulario.save()
-            model_id = formulario['model'].value()
             messages.success(request, 'Docena actualizada satisfactoriamente')
 
-            return redirect(to="dozens.index", id = model_id)
+            return redirect(to="dozens.show", name = dozen.model.name)
         else:
             data['form'] = formulario
             messages.error(request, 'Error al actualizar la docena')
