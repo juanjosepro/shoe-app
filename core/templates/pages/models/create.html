@@ -2,158 +2,174 @@
 
 {% block title %} Crear Modelo {% endblock %}
 
-{% block stylesheets %}
-  <link href="/static/assets/css/plugins/select2.min.css" rel="stylesheet" />
-  <link href="/static/assets/css/plugins/select2-bootstrap4.min.css" rel="stylesheet" />
-  <link href="/static/assets/css/select2.css" rel="stylesheet" />
-
-{% endblock stylesheets %}
-
 {% block navigation %}
-  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">Productos</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">Zapato</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;"><b>{{ category }}</b></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Agregar un nuevo Modelo</li>
-    </ol>
-  </nav>
-{% endblock navigation %}
+<nav aria-label="breadcrumb" role="navigation" class="mt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;">Categoria</a></li>
+    <li class="breadcrumb-item text-capitalize">
+      <a href="javascript:;"><b>{{ category }}</b></a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Crear Modelo
+    </li>
+  </ol>
+</nav>
+{% endblock navigation %} {% block content %}
 
-{% block content %}
-  
-  <div class="row justify-content-center">
-    <div class="col-12 col-sm-8 col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Crear Modelo</h4>
+<div class="row justify-content-center">
+  <div class="col-12 col-sm-8 col-md-6">
+    <div class="card">
+      <div class="card-header border-bottom">
+        <h4 class="card-title text-uppercase font-weight-bold">Crear Modelo</h4>
+      </div>
+      <form action="{% url 'models.store' category %}" method="POST">
+        {% csrf_token %}
+        <div class="card-body">
+          <div>
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                <div> {% comment %} <-- required {% endcomment %}
+                  <label for="id_category">Categoria*</label>
+                </div>
+                  <input
+                    class="form-control"
+                    required
+                    type="text"
+                    readonly
+                    name="category_name"
+                    id="id_category"
+                    value="{{ category }}"
+                  />
+
+                  <input
+                    type="hidden"
+                    name="category"
+                    value="{{category.id}}"
+                  />
+                  <div class="row">
+                    <div class="col-12 col-sm-6">
+                      {% for error in form.category.errors %}
+                      <small class="form-text text-danger font-weight-bold"
+                        >{{ error }}</small
+                      >
+                      {% endfor %}
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <small class="form-text text-muted"
+                        >Categoria a la que pertenecerá este modelo</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <form action="{% url 'models.store' category %}" method="POST">
-                {% csrf_token %}
-                <div class="card-body">
-                    <div>
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="form-group">
-                            <label for="id_category">Categoria*</label>
-                            
-                            <input class="form-control" required type="text" disabled
-                              name="category_name" id="id_category" value="{{ category }}">
-                              
-                            <input type="hidden" name="category" value="{{category.id}}">
-                            <div class="row">
-                              <div class="col-12 col-sm-6">
-                                {% for error in form.category.errors %}
-                                  <small class="form-text text-danger font-weight-bold">{{ error }}</small>
-                                {% endfor %}
-                              </div>
-                              <div class="col-12 col-sm-6">
-                                <small class="form-text text-muted">Categoria a la que pertenecerá este modelo</small>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="form-group">
-                            <label for="id_name">Nombre*</label>
-                            {{form.name}}
-                            <div class="row">
-                              <div class="col-12 col-sm-6">
-                                {% for error in form.name.errors %}
-                                  <small class="form-text text-danger font-weight-bold my-0">{{ error }}</small>
-                                {% endfor %}
-                              </div>
-                              <div class="col-12 col-sm-6">
-                                <small class="form-text text-muted">El nombre del modelo debe ser unico</small>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-10" id="container-add-new-element">
-                            <label for="id_name">Elija la talla y su precio</label>
-                          <div class="row" id="element_to_clone">
-                            <div class="col-6">
-                              <select class="form-control"
-                                name="sizes"
-                                required
-                                >
-                                {% for size in form.sizes %}
-                                  {{size}}
-                                {% endfor %}
-                              </select>
-                              <div class="row">
-                                <div class="col-12 col-sm-6">
-                                  {% for error in form.sizes.errors %}
-                                    <small class="form-text text-danger font-weight-bold">{{ error }}</small>
-                                  {% endfor %}
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <input style="width:100%" type="number" name="price" id="id_price" autocomplete="off" placeholder="precio*" class="form-control">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-2">
-                          <a
-                            onClick="cloneItem()"
-                            id="btn-add"
-                            data-toggle="tooltip" data-placement="top" title="Agregar mas tallas"
-                            rel="tooltip" class="btn btn-info btn-sm px-1 ml-1 text-white">
-                            <i class="material-icons">add</i>
-                          </a>
-                        </div>
-                        {% comment %} here it will be cloned {% endcomment %}
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="id_name">Nombre del modelo*</label>
+                  {{form.name}}
+                  <div class="row">
+                    <div class="col-12 col-sm-6">
+                      {% for error in form.name.errors %}
+                      <small class="form-text text-danger font-weight-bold my-0"
+                        >{{ error }}</small
+                      >
+                      {% endfor %}
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <small class="form-text text-muted"
+                        >El nombre del modelo debe ser unico</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="container-add-new-element">
+              <label for="id_price" class="ml-3">Elija la talla y su precio*</label>
+              <div class="col-10" id="element_to_clone">
+                <div class="row" >
+                  <div class="col-6">
+                    <select class="form-control" name="sizes" required>
+                      <option value="">Elige una talla</option>
+                      {% for size in sizes %}
+                      <option value="{{size.id}}">{{size.name}}</option>
+                      {% endfor %}
+                    </select>
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        {% for error in form.sizes.errors %}
+                        <small class="form-text text-danger font-weight-bold"
+                          >{{ error }}</small
+                        >
+                        {% endfor %}
                       </div>
                     </div>
+                  </div>
+                  <div class="col-6">
+                    <input
+                      type="number"
+                      name="prices"
+                      id="id_price"
+                      step="0.01"
+                      autocomplete="off"
+                      placeholder="precio*"
+                      class="form-control mt-1"
+                    />
+                  </div>
                 </div>
-                <div class="card-footer float-right">
-                    <button type="submit" class="btn btn-success bt-sm">Crear</button>
-                </div>
-            </form>
+              </div>
+              <div class="col-2">
+                <a
+                  onClick="cloneItem()"
+                  id="btn-add"
+                  data-toggle="tooltip" data-placement="left" title="Agregar mas tallas"
+                  rel="tooltip" class="btn btn-info btn-sm px-1 ml-1 text-white">
+                  <i class="material-icons">add</i>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="card-footer border-top mt-4">
+          <button type="submit" class="btn btn-success btn-block">Crear Modelo</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-{% endblock content %}
+{% endblock content %} {% block javascripts %}
+<script>
+  let i = 0;
+  const cloneItem = () => {
+    const element = document.getElementById("element_to_clone");
+    const element_to_clone = element.cloneNode(true);
+    element_to_clone.id = "element_to_clone" + i;
+    const remove = document.createElement("a");
+    remove.innerHTML = `<i class="material-icons text-danger ml-4 mt-3"
+      onclick="removeItem('element_to_clone${i}')"
+      id="element_to_clone${i}"
+      style="font-size:20px; cursor:pointer">clear</i>`;
+    const container = document.getElementById("container-add-new-element");
+    container.appendChild(element_to_clone);
+    container.appendChild(remove);
+    i++;
+  };
+  const removeItem = (el) => {
+    //remove the contenido inputs and selects
+    const element = document.getElementById(el);
+    element.parentNode.removeChild(element)
+    
+    //required
+    //remove the icon [x] that is used to remove
+    const element2 = document.getElementById(el);
+    element2.parentNode.removeChild(element2)
 
-{% block javascripts %}
-  <script src="/static/assets/js/plugins/select2.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('.select2').select2({
-        theme: 'bootstrap4'
-      })
-    });
-
-    {% comment %} function addNewRow(){
-        let container = document.getElementById("container-add-new-element");
-        let newInput = document.createElement('div');
-        newInput.innerHTML = `<div class='d-flex justify-content-between pt-3'>
-            <input style='width:45%' type='number' name='price[]' id='id_price' placeholder='precio*' class='form-control'>
-        </div>`;
-
-        container.appendChild(newInput)
-    }
-
-    window.onload = function(){
-         var btnAdd = document.getEmentById("btn_add");   
-         btnAdd.onclick = addNewRow;
-    } {% endcomment %}
-
-    function cloneItem(){
-      $('.select2').select2('destroy')
-      const element_to_clone = document.getElementById("element_to_clone")
-      const container = document.getElementById("container-add-new-element")
-      container.appendChild(element_to_clone.cloneNode(true))
-      $('.select2').select2({
-        theme: 'bootstrap4'
-      })
-    }
-  </script>
+    //const container = document.getElementById("container-add-new-element");
+    //container.removeChild(element);
+  };
+</script>
 {% endblock javascripts %}

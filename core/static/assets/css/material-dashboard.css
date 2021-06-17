@@ -14597,7 +14597,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .nav li .dropdown-menu a:hover,
 .sidebar .nav li .dropdown-menu a:focus,
 .sidebar .nav li.active>[data-toggle="collapse"] {
-  background-color: rgba(200, 200, 200, 0.2);
+  background-color: rgba(200, 200, 200, 0.5);
   color: #3C4858;
   box-shadow: none;
 }
@@ -14719,7 +14719,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   font-weight: 400;
   line-height: 30px;
   overflow: hidden;
-  text-align: center;
+  /* text-align: center; */
   display: block;
 }
 

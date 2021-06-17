@@ -1,10 +1,12 @@
 {% with request.resolver_match.url_name as url_name %}
-<div class="sidebar" data-color="rose" data-background-color="black" data-image="/static/assets/img/sidebar-1.jpg">
+<div class="sidebar" data-color="green" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
   <div class="logo">
-    <a target="_blank" rel="noopener noreferrer" 
-        target="_blank" rel="noopener noreferrer" 
-        href="#" class="simple-text logo-normal">
-      Dashboard Shoe App
+    <a rel="noopener noreferrer" href="#" class="simple-text logo-mini">
+      SP
+    </a>
+    <a rel="noopener noreferrer" 
+      href="#" class="simple-text logo-normal">
+      Shoe App
     </a>
   </div>
   {% if user.is_authenticated %}
@@ -16,9 +18,9 @@
           <p>Dashboard</p>
         </a>
       </li>
-      <li class="nav-item {% if url_name == 'products.filter-by-name' %} active {% endif %}">
+      {% comment %} <li class="nav-item {% if url_name == 'products.filter-by-name' %} active {% endif %}">
         <a class="nav-link" data-toggle="collapse" href="#product" aria-expanded="true">
-          <i class="material-icons">dashboard</i>
+          <i class="material-icons">dashboard_customize</i>
           <p>Productos
             <b class="caret"></b>
           </p>
@@ -45,16 +47,20 @@
             </div>
           </ul>
         </div>
-      </li>
+      </li> {% endcomment %}
       <li class="nav-item {% if url_name == 'categories.index' %} active {% endif %}">
         <a class="nav-link" href="{% url 'categories.index' %}">
-          <i class="material-icons">content_paste</i>
+          <i class="material-icons">category</i>
           <p>Categorias</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item 
+        {% if url_name == 'materials.index' %} active {% endif %}
+        {% if url_name == 'inventory.index' %} active {% endif %}
+        {% if url_name == 'dozens.index' %} active {% endif %}"
+      >
         <a class="nav-link" data-toggle="collapse" href="#inventory" aria-expanded="true">
-          <i class="material-icons">content_paste</i>
+          <i class="material-icons">fact_check</i>
           <p>Inventario
             <b class="caret"></b>
           </p>
@@ -85,32 +91,48 @@
       </li>
       <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
         <a class="nav-link" href="{% url 'providers.show' 'proveedor' 'todos' %}">
-          <i class="material-icons">library_books</i>
+          <i class="material-icons">recent_actors</i>
           <p>Proveedores</p>
         </a>
       </li>
       <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
         <a class="nav-link" href="{% url 'customers.show' 'cliente'  'todos' %}">
-          <i class="material-icons">library_books</i>
+          <i class="material-icons">switch_account</i>
           <p>Clientes</p>
         </a>
       </li>
-      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'sales.index'%}">
-          <i class="material-icons">bubble_chart</i>
-          <p>Ventas</p>
+      <li class="nav-item 
+        {% if url_name == 'dozens.index' %} active {% endif %}
+        {% if url_name == 'sales.index' %} active {% endif %}"
+      >
+        <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
+          <i class="material-icons">card_travel</i>
+          <p>Ventas
+            <b class="caret"></b>
+          </p>
         </a>
+        <div class="collapse" id="sales">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'dozens.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.index' %}">
+                <span class="sidebar-mini"> RV </span>
+                <span class="sidebar-normal">Realizar Venta</span>
+              </a>
+            </li>
+            </li>
+            <li class="nav-item {% if url_name == 'sales.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'sales.index' %}">
+                <span class="sidebar-mini"> VR </span>
+                <span class="sidebar-normal">Ventas Realizadas</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </li>
       <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
         <a class="nav-link" href="/page-user.html">
           <i class="material-icons">person</i>
           <p>User Profile</p>
-        </a>
-      </li>
-      <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-maps.html">
-          <i class="material-icons">location_ons</i>
-          <p>Maps</p>
         </a>
       </li>
       <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
@@ -119,10 +141,9 @@
           <p>Notifications</p>
         </a>
       </li>
-
       <li class="nav-item ">
         <a class="nav-link" href="{% url 'logout' %}" >
-          <i class="material-icons">directions_run</i>
+          <i class="material-icons">power_settings_new</i>
           <p>Logout</p>
         </a>
       </li>
@@ -133,7 +154,7 @@
   {% block javascripts %}
   <script>
 
-    function getProducts() {
+    {% comment %} function getProducts() {
       return {
         products: [],
         getCookie: function(name) {
@@ -169,11 +190,7 @@
             });
         }
       }
-    }
-    function redirect(id) {
-      console.log(id)
-      //location.href = `/categorias/id`
-    }
+    } {% endcomment %}
   </script>
   {% endblock javascripts %}
 </div>

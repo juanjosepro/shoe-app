@@ -2,13 +2,11 @@
 
 {% block title %} Ventas {% endblock %}
 
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% block navigation %}
   <nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
-      <li class="breadcrumb-item text-capitalize" aria-current="page">Ventas</li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">Ventas</a></li>
       <li class="breadcrumb-item text-capitalize active" aria-current="page">
       {% if filter_by %}
         {{filter_by}}
@@ -70,7 +68,7 @@
                                     <td>{{ sale.created_at }}</td>
                                     <td class="td-actions text-right">
                                         <a href="{% url 'sales.show' sale.customer.id %}"
-                                            data-toggle="tooltip" data-placement="top" title="Ver historial"
+                                            data-toggle="tooltip" data-placement="bottom" title="Ver historial"
                                             rel="tooltip" class="badge badge-pill badge-secondary px-3 py-1">
                                             Ver Historial
                                         </a>
@@ -87,5 +85,3 @@
     </div>
 
 {% endblock content %}
-
-{% block javascripts %}{% endblock javascripts %}

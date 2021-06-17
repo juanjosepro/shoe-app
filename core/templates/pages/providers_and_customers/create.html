@@ -2,8 +2,6 @@
 
 {% block title %} Crear cliente o Proveedor {% endblock %}
 
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% load crispy_forms_tags %}
 
 {% block navigation %}
@@ -20,16 +18,16 @@
   <div class="row justify-content-center">
     <div class="col col-6">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Crear Cliente o Proveedor</h4>
+            <div class="card-header border-bottom">
+                <h4 class="card-title text-uppercase font-weight-bold">Crear Cliente o Proveedor</h4>
             </div>
             <form action="" method="POST">
                 <div class="card-body">
                     {% csrf_token %}
                     {{form | crispy}}
                 </div>
-                <div class="card-footer float-right">
-                    <button type="submit" class="btn btn-success bt-sm">Crear</button>
+                <div class="card-footer border-top mt-3">
+                    <button type="submit" class="btn btn-success btn-block">Crear</button>
                 </div>
             </form>
         </div>

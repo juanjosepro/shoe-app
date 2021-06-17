@@ -2,32 +2,27 @@
 
 {% block title %} Actualizar Modelo {% endblock %}
 
-{% block stylesheets %}
-  <link href="/static/assets/css/plugins/select2.min.css" rel="stylesheet" />
-  <link href="/static/assets/css/plugins/select2-bootstrap4.min.css" rel="stylesheet" />
-  <link href="/static/assets/css/select2.css" rel="stylesheet" />
-{% endblock stylesheets %}
-
 {% block navigation %}
   <nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">Productos</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">Zapato</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">{{ model.category }}</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;"><b>{{ model.name }}</b></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Actualizar</li>
+      <li class="breadcrumb-item"><a href="javascript:;">Categoria</a></li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">{{ model.category }}</a></li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;"><b>{{ model.name }}</b></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Actualizar Modelo</li>
     </ol>
   </nav>
 {% endblock navigation %}
+
+{% load change_comma_to_dot %}
 
 {% block content %}
   
   <div class="row justify-content-center">
     <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Actualizar Modelo</h4>
+            <div class="card-header border-bottom">
+                <h4 class="card-title text-uppercase font-weight-bold">Actualizar Modelo</h4>
             </div>
             <form action="" method="POST">
                 <div class="card-body">
@@ -35,10 +30,9 @@
                     <div>
                       <div class="row">
                         <div class="col-12">
-                          <div class="select2-purple">
                             <div class="form-group">
-                              <label for="id_category">Categoria*</label>
-                              <input class="form-control" required type="text" disabled
+                              <div><label for="id_category">Categoria*</label></div>
+                              <input class="form-control" required type="text" readonly
                                name="category_name" id="id_category" value="{{ model.category }}">
                               <input type="hidden" name="category" value="{{form.category.value}}">
                               <div class="row">
@@ -52,13 +46,12 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                              <label for="id_name" title="{{ form.category.help_text }}">Nombre*</label>
+                              <label for="id_name" title="{{ form.category.help_text }}">Nombre del modelo*</label>
                               {{form.name}}
                               <div class="row">
                                 <div class="col-12 col-sm-6">
@@ -75,16 +68,49 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-10" id="container-add-new-element">
-                          <label>Elija la talla y su precio</label>
+                        <div class="col-12">
+                          <label>Tallas y precios de este modelo</label>
                           {% for size in model.all_your_sizes %}
+                          <div class="row">
+                            <div class="col-6">
+                              <input readonly style="width:100%" type="text" name="sizes_name" value="{{size.size}}" class="form-control">
+                              <input type="hidden" name="sizes" value="{{ size.size.id }}">
+                            </div>
+                            <div class="col-6">
+                              <input style="width:100%" type="number" name="price" value="{{size.price | change_comma_to_dot}}" step="0.01" autocomplete="off" class="form-control">
+                            </div>
+                          </div>
+                          {% endfor %}
+                          <div class="row">
+                            <div class="col-12 col-sm-12">
+                              {% for error in form.sizes.errors %}
+                                <small class="form-text text-danger font-weight-bold">{{ error }}</small>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div x-data="toggle()" class="row mt-4">
+                        <div class="col-12 d-flex justify-content-between align-items-center">
+                          <label for="id_name">¿Desea agregar mas tallas a este modelo?</label>
+                          <div class="togglebutton">
+                            <label>
+                              <input type="checkbox"  @click="showAndOpen()">
+                                <span class="toggle"></span>
+                                <b x-text="title"></b>
+                            </label>
+                          </div>
+                        </div>
+                        <div x-show="isOpen()" class="col-10" id="container-add-new-element">
                           <div class="row" id="element_to_clone">
                             <div class="col-6">
                               <select class="form-control"
-                                name="sizes"
-                                required
+                                name="more_sizes"
                                 >
-                                <option value="{{size.id}}">{{size.size}}</option>
+                                <option value="">Elige una talla</option>
+                                {% for size in sizes %}
+                                  <option value="{{size.id}}">{{size}}</option>
+                                {% endfor %}
                               </select>
                               <div class="row">
                                 <div class="col-12 col-sm-6">
@@ -95,12 +121,11 @@
                               </div>
                             </div>
                             <div class="col-6">
-                              <input style="width:100%" type="number" name="price" value="{{size.price}}" step="0,01" autocomplete="off" class="form-control">
+                              <input type="number" name="more_price" id="id_price" step="0.01" autocomplete="off" placeholder="precio*" class="form-control mt-1">
                             </div>
                           </div>
-                          {% endfor %}
                         </div>
-                        <div class="col-2">
+                        <div x-show="isOpen()" class="col-2">
                           <a
                             onClick="cloneItem()"
                             id="btn-add"
@@ -109,12 +134,11 @@
                             <i class="material-icons">add</i>
                           </a>
                         </div>
-                        {% comment %} here it will be cloned {% endcomment %}
                       </div>
                     </div>
                 </div>
-                <div class="card-footer float-right">
-                    <button type="submit" class="btn btn-warning bt-sm">Actualizar</button>
+                <div class="card-footer border-top mt-3">
+                    <button type="submit" class="btn btn-warning btn-block">Actualizar Modelo</button>
                 </div>
             </form>
         </div>
@@ -124,12 +148,27 @@
 {% endblock content %}
 
 {% block javascripts %}
-  <script src="/static/assets/js/plugins/select2.min.js"></script>
   <script>
-    $(document).ready(function() {
-      $('.select2').select2({
-        theme: 'bootstrap4'
-      });
-    });
+    function toggle(){
+        return {
+            show: false,
+            title: 'Si mostrar campos',
+            showAndOpen(){
+                this.show = !this.show
+                if (this.show) {
+                    this.title = 'No ocultar campos'
+                } else {
+                    this.title = 'Si mostrar campos'
+                }
+            },
+            isOpen() {return this.show === true}
+        }
+    }
+
+    const cloneItem = () => {
+      const element_to_clone = document.getElementById("element_to_clone")
+      const container = document.getElementById("container-add-new-element")
+      container.appendChild(element_to_clone.cloneNode(true))
+    }
   </script>
 {% endblock javascripts %}

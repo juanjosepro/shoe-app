@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .product.models import Product
 from .sizes.models import Sizes
 from .category.models import Category
 from .model.models import Model
@@ -8,10 +7,7 @@ from .inventory.models import Inventory
 from .providers_and_customers.models import ProvidersAndCustomers
 from .sales.models import Sales
 
-# Register your models here.
 
-
-admin.site.register(Product)
 admin.site.register(Sizes)
 admin.site.register(Category)
 admin.site.register(Model)

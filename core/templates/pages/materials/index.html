@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-12 col-sm-6 col-md-4">
                                 <div class="form-group">
-                                    <label for="id_name">Nombre</label>
+                                    <label for="id_name">Nombre *</label>
                                     <input type="text" name="name" id="id_name" class="form-control">
                                     <div class="row">
                                         <div class="col-12">
@@ -40,7 +40,7 @@
                                 <div id="container-add-new-element" class="form-group">
                                     <label for="id_type">Tipo de material</label>
                                     <div class="input-group">
-                                        <input type="text" name="types[]" id="id_type" required class="form-control">
+                                        <input type="text" name="types[]" id="id_type" class="form-control">
                                         <a
                                             onClick="addInput()"
                                             id="btn-add"
@@ -68,20 +68,49 @@
         </div>
     </div>
     <div class="row">
-        {% for material in materials %}
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title text-uppercase">{{material.name}}</h4>
-                    <h6 class="card-subtitle mb-2 text-muted text-left">{{material.types}}</h6>
-                    <div class="d-flex justify-content-between" style="width:100%">
-                        <a href="{% url 'materials.update' material.name %}" class="card-link h6"><b>Editar</b></a>
-                        <a href="{% url 'inventory.show' material.name %}" class="card-link h6"><b>Ver inventario</b></a>
+        {% for material in entity %}
+        <div class="col-12 col-sm-4 col-md-3">
+            <div class="card text-dark bg-white mb-0" style="min-height: 10rem;">
+                <div class="card-body pt-2">
+                    <div class="d-flex flex-row justify-content-between border-bottom mb-2">
+                        <h5 class="card-title text-dark"><b class="text-uppercase">{{material}}</b></h5>
+                        <div class="d-flex">
+                            <a href="{% url 'materials.update' material %}"
+                                data-toggle="tooltip" data-placement="top" title="Actualizar/Ver Material"
+                                rel="tooltip" class="text-dark">
+                                <i class="material-icons" style="font-size:19px">edit</i>
+                            </a>
+                            <a href="{% url 'inventory.show' material %}"
+                                data-toggle="tooltip" data-placement="top" title="Ver inventario"
+                                rel="tooltip" class="text-dark">
+                                <i class="material-icons">add</i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-text d-flex flex-column">
+                        <b>Tipos de materiales</b>
+                        {% if material.types %}
+                        <div>
+                            {% for type in material.types %}
+                                <a href="#">#{{type}} &nbsp;</a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <em><s>Ninguno</s></em>
+                        {% endif %}
+                        <small class="align-self-end">Creado {{material.created_at}}</small>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+        <div class="container">
+            <div class="row justify-content-md-center mt-4">
+                <div class="col col-3">
+                {% include 'paginator.html' %}
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock content %}

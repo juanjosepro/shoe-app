@@ -1,11 +1,9 @@
 from django.db import models
-from apps.product.models import Product
 
 
 class Category(models.Model):
-    product = models.ForeignKey(Product, related_name='categories', on_delete=models.PROTECT, blank=False, verbose_name='Producto')
-    name = models.CharField(max_length=30, unique=True, blank=False, verbose_name='Nombre')
-    description = models.TextField(max_length=255, null=True, verbose_name='Descripción')
+    name = models.CharField(max_length=30, unique=True, verbose_name='Nombre')
+    description = models.TextField(max_length=255, blank=True, verbose_name='Descripción')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
     update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
 

@@ -21,6 +21,8 @@
   </nav>
 {% endblock navigation %}
 
+{% load change_comma_to_dot %}
+
 {% block content %}
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
@@ -28,7 +30,7 @@
         </div>
         <div class="col-12 col-sm-6 col-md-3 ml-auto">
             <div class="dropdown show">
-                <a class="btn btn-secondary btn-block btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                <a class="btn btn-default btn-block btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Filtrar por
                 </a>
@@ -67,18 +69,30 @@
                                     {% else %}
                                         <td><span class="badge badge-pill badge-success px-3">{{ inventory.amount }}</span></td>
                                     {% endif %}
-                                    <td>{{ inventory.color }}</td>
-                                    <td>{{ inventory.type }}</td>
-                                    <td class="text-right">S/. {{ inventory.price }}</td>
+                                    <td>
+                                    {% if inventory.color %}
+                                        {{ inventory.color }}
+                                    {% else %}
+                                        <em>Ninguno</em>
+                                    {% endif %}
+                                    </td>
+                                    <td>
+                                    {% if inventory.type %}
+                                        {{ inventory.type }}
+                                    {% else %}
+                                        <em>Ninguno</em>
+                                    {% endif %}
+                                    </td>
+                                    <td>S/. {{ inventory.price | change_comma_to_dot }}</td>
                                     <td class="text-right">{{ inventory.created_at }}</td>
                                     <td class="td-actions text-right">
                                         <a href="{% url 'inventory.update' inventory.id %}"
                                             data-toggle="tooltip" data-placement="top" title="Actualizar"
-                                            rel="tooltip" class="btn btn-success">
+                                            rel="tooltip" class="btn btn-warning">
                                             <i class="material-icons">edit</i>
                                         </a>
                                         <a href="#"
-                                            data-toggle="tooltip" data-placement="top" title="Ver sus docenas"
+                                            data-toggle="tooltip" data-placement="top" title="working..."
                                             rel="tooltip" class="btn btn-info">
                                             <i class="material-icons">add</i>
                                         </a>

@@ -1,12 +1,18 @@
 from django import forms
-from django.forms import ValidationError
 from .models import ProvidersAndCustomers
 
 class ProviderAndCustomerForm(forms.ModelForm):
-    
-    direction = forms.CharField(widget=forms.Textarea(attrs={'rows':'3'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows':'3'}))
-    
+
     class Meta:
         model = ProvidersAndCustomers
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['direction'].widget.attrs.update({
+            'rows': '3',
+        })
+        self.fields['description'].widget.attrs.update({
+            'rows': '3',
+        })

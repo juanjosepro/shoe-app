@@ -75,6 +75,8 @@ def show(request, id):
         dozens = []
         for id in dozens_list: #id = 2
             dozen = Dozen.objects.get(id = id) #<dozen>
+            model = dozen.model.sizesandmodels_set.get(size_id = dozen.size_id)
+            dozen.price = model.price
             dozens.append(dozen)
         
         result['data'] = dozens
@@ -108,9 +110,12 @@ def confirm_selected_items(request):
     dozens = request.POST.getlist('dozens[]')
     list = []
     total = 0
+
     for id in dozens:
-        item = Dozen.objects.get(id = id)
-        total += item.model.price
+        item = Dozen.objects.get(id = id)        
+        model = item.model.sizesandmodels_set.get(size_id = item.size_id)
+        item.price = model.price
+        total += model.price
         list.append(item)
 
     data = {
@@ -127,15 +132,18 @@ def confirm_selected_items(request):
 def store(request):
     dozens = request.POST.getlist('dozens[]')
     total = 0
+
     for id in dozens:
         item = Dozen.objects.get(id = id)
-        total += item.model.price
+        model = item.model.sizesandmodels_set.get(size_id = item.size_id)
+        item.price = model.price
+        total += model.price
 
     data = {
         'total': total, #decimal
         'form': SalesForm()
     }
-    print(type(total))
+
     print(request.POST)
     if request.method == 'POST':
         money_paid = 0

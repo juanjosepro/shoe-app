@@ -7,21 +7,18 @@ class Model(models.Model):
     category = models.ForeignKey(
         Category, related_name='models',
         on_delete=models.PROTECT,
-        blank=False,
         verbose_name='Categoria',
         help_text='Seleccione la categoria a la que pertenecerá este modelo',
     )
     name = models.CharField(
         max_length=30,
         unique=True,
-        blank=False,
         verbose_name='Nombre',
         help_text='Nombre del modelo',
     )
     sizes = models.ManyToManyField(
         Sizes,
         through='SizesAndModels',
-        blank=False,
         verbose_name='Tallas',
         help_text='¿Que tallas va  a tener este modelo?',
     )
@@ -35,11 +32,10 @@ class Model(models.Model):
         return self.name
 
 class SizesAndModels(models.Model):
-    size = models.ForeignKey(Sizes, on_delete=PROTECT, null=False, blank=False)
-    model = models.ForeignKey(Model,on_delete=PROTECT, null=False, blank=False)
+    size = models.ForeignKey(Sizes, on_delete=PROTECT)
+    model = models.ForeignKey(Model,on_delete=PROTECT)
     price = models.DecimalField(
         max_digits=5,
-        blank=False,
         decimal_places=2,
         verbose_name='Precio',
         help_text='Precio de este talla',

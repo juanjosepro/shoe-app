@@ -50,13 +50,19 @@
                                     <td class="text-uppercase">{{ dozen.model }}</td>
                                     <td>{{ dozen.amount }}</td>
                                     <td>{{ dozen.color }}</td>
-                                    <td>{{ dozen.sizes }}</td>
+                                    <td>{{ dozen.size }}</td>
                                     <td>{{ dozen.material }}</td>
                                     {% if dozen.status == "disponible" %}
                                         <td><span class="badge badge-pill badge-success">{{ dozen.status }}</span></td>
                                     {% endif %}
                                     <td class="text-right">{{ dozen.created_at }}</td>
-                                    <td class="text-right">{{ dozen.note }}</td>
+                                    <td class="text-right">
+                                        {% if dozen.note %}
+                                            {{ dozen.note }}
+                                        {% else %}
+                                            <em><s>Ninguno</s></em>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

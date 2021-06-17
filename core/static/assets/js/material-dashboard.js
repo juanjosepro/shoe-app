@@ -61,6 +61,7 @@ $(document).ready(function() {
 
   // check if there is an image set for the sidebar's background
   md.checkSidebarImage();
+  md.initMinimizeSidebar();
 
   //    Activate bootstrap-select
   if ($(".selectpicker").length != 0) {

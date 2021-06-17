@@ -14,6 +14,8 @@
   </nav>
 {% endblock navigation %}
 
+{% load change_comma_to_dot %}
+
 {% block content %}
 
     <div class="row">
@@ -32,7 +34,7 @@
                                 {% endif %}
                                 Venta del {{dozen.title}}
                             </button>
-                            <button class="btn btn-default float-right btn-sm">Precio total de la venta: S/ <b>{{dozen.total_price}}</b></button>
+                            <button class="btn btn-default float-right btn-sm">Precio total de la venta: S/ <b>{{dozen.total_price | change_comma_to_dot}}</b></button>
                             <button class="btn btn-purple float-right btn-sm">Docenas vendidas: <b>{{dozen.number_of_dozens}}</b></button>
                         </h5>
                     </div>
@@ -42,7 +44,14 @@
                             <div class="row">
                                 <div class="col-12 col-sm-4 col-md-4">
                                     <div class="card-title ml-2" style="font-size:13px">
-                                        Nota sobre la venta: <b class="text-lowercase">{{dozen.note}}</b>
+                                        Nota sobre la venta: 
+                                        <b>
+                                            {% if dozen.note %}
+                                                {{dozen.note}}
+                                            {% else %}
+                                                <em><s>Ninguno</s></em>
+                                            {% endif %}
+                                        </b>
                                     </div>
                                     <div class="card-title ml-2" style="font-size:13px">
                                         Tipo de pago : <b class="text-capitalize">{{dozen.status}}</b>
@@ -53,12 +62,12 @@
                                         {% if dozen.owe_money %}
                                             <div class="card-title ml-2" style="font-size:13px">El cliente solo pagó:  
                                                 <span class="badge badge-pill badge-info pt-1">
-                                                S/ {{ dozen.money_paid }}
+                                                S/ {{ dozen.money_paid | change_comma_to_dot}}
                                                 </span>
                                             </div>
                                             <div class="card-title ml-2" style="font-size:13px">Y debe: 
                                                 <span class="badge badge-pill badge-danger pt-1">
-                                                S/ {{ dozen.total_money_owed }}
+                                                S/ {{ dozen.total_money_owed | change_comma_to_dot}}
                                                 </span>
                                             </div>
                                         {% else %}
@@ -118,12 +127,18 @@
                                     {% for dozen in dozen.data %}
                                         <tr>
                                             <td class="text-uppercase">{{ dozen.model }}</td>
-                                            <td>{{ dozen.model.price }}</td>
+                                            <td>S/ {{ dozen.price | change_comma_to_dot }} </td>
                                             <td>{{ dozen.amount }}</td>
                                             <td>{{ dozen.color }}</td>
-                                            <td>{{ dozen.sizes }}</td>
+                                            <td>{{ dozen.size }}</td>
                                             <td>{{ dozen.material }}</td>
-                                            <td class="text-right">{{ dozen.note }}</td>
+                                            <td class="text-right">
+                                            {% if dozen.note %}
+                                                {{dozen.note}}
+                                            {% else %}
+                                                <em><s>Ninguno</s></em>
+                                            {% endif %}
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

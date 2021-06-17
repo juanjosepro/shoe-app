@@ -13,13 +13,13 @@ class ProvidersAndCustomers(models.Model):
         ('proveedor', 'proveedor'),
     )
 
-    types = models.CharField(max_length=10, choices=types, default='cliente', null=False, blank=False, verbose_name='¿Proveedor o Cliente?')
-    names_full = models.CharField(max_length=50, null=True, blank=False, verbose_name='Nombres y apellidos')
-    phone = models.CharField(max_length=15, null=True, blank=False, verbose_name='Teléfono')
-    email = models.CharField(max_length=30, null=True, blank=False, verbose_name='Email')
-    direction = models.TextField(max_length=255, null=True, blank=False, verbose_name='Direción')
-    description = models.TextField(max_length=255, null=True, blank=False, verbose_name='Descripcion')
-    status = models.CharField(max_length=10, choices=statuses, default='activo', null=False, blank=False, verbose_name='Estado')
+    types = models.CharField(max_length=10, choices=types, default='cliente', verbose_name='¿Proveedor o Cliente?')
+    names_full = models.CharField(max_length=50, verbose_name='Nombres y apellidos')
+    phone = models.CharField(max_length=15, blank=True, verbose_name='Teléfono')
+    email = models.CharField(max_length=30, blank=True, verbose_name='Email')
+    status = models.CharField(max_length=10, choices=statuses, default='activo', verbose_name='Estado')
+    direction = models.TextField(max_length=255, blank=True, verbose_name='Direción')
+    description = models.TextField(max_length=255, blank=True, verbose_name='Descripcion')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creacion')
     update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
 

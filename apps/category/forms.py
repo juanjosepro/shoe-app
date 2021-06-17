@@ -1,21 +1,29 @@
 from django import forms
-from django.forms import ValidationError
 from .models import Category
+
 
 class CategoryForm(forms.ModelForm):
 
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows':'3'}))
-
-    #no funciona para actualziar porque ya existe este mismo
-    """ def clean_name(self):
-        name = self.cleaned_data['name']
-        exists = Category.objects.filter(name__iexact = name).exists()
-
-        if exists:
-            raise ValidationError('Este nombre ya existe!')
-        
-        return name """
+    def clean_name(self):
+        try:
+            category = Category.objects.get(
+                name__iexact=self.cleaned_data['name'].strip())
+            if not self.instance.pk:
+                raise forms.ValidationError('Esta categoria ya existe')
+            elif self.instance.pk != category.pk:
+                raise forms.ValidationError(
+                    'Cambio no permitido la categoria ya existe')
+        except Category.DoesNotExist:
+            pass
+        return self.cleaned_data['name']
 
     class Meta:
         model = Category
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['description'].widget.attrs.update({
+            'rows': '3',
+        })

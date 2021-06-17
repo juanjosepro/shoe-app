@@ -73,9 +73,27 @@
                                 <tr>
                                     <td class="text-uppercase">{{ model.types }}</td>
                                     <td>{{ model.names_full }}</td>
-                                    <td>{{ model.phone }}</td>
-                                    <td>{{ model.email }}</td>
-                                    <td>{{ model.direction }}</td>
+                                    <td>
+                                    {% if model.phone %}
+                                        {{ model.phone }}
+                                    {% else %}
+                                        <em>Ninguno</em>
+                                    {% endif %}
+                                    </td>
+                                    <td>
+                                    {% if model.email %}
+                                        {{ model.email }}
+                                    {% else %}
+                                        <em>Ninguno</em>
+                                    {% endif %}
+                                    </td>
+                                    <td>
+                                    {% if model.direction %}
+                                        {{ model.direction }}
+                                    {% else %}
+                                        <em>Ninguno</em>
+                                    {% endif %}
+                                    </td>
                                     {% if model.status == 'activo' %}
                                         <td class="text-right"><span class="badge badge-pill badge-success px-3" style="font-size: 12px">{{ model.status }}</span></td>
                                     {% else %}
@@ -85,7 +103,7 @@
                                         {% if type == 'cliente' %}
                                             <a href="{% url 'customers.update' model.id %}"
                                                 data-toggle="tooltip" data-placement="top" title="Actualizar"
-                                                rel="tooltip" class="btn btn-success">
+                                                rel="tooltip" class="btn btn-warning">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                             <a href="{% url 'sales.show' model.id %}"
@@ -96,7 +114,7 @@
                                         {% else %}
                                             <a href="{% url 'providers.update' model.id %}"
                                                 data-toggle="tooltip" data-placement="top" title="Actualizar"
-                                                rel="tooltip" class="btn btn-success">
+                                                rel="tooltip" class="btn btn-warning">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                             <a href="#"

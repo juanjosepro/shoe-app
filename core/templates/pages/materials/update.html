@@ -13,8 +13,8 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
       <li class="breadcrumb-item"><a href="javascript:;">Material</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;"><b>{{ material.name }}</b></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Actualizar</li>
+      <li class="breadcrumb-item text-capitalize"><a href="javascript:;"><b>{{ material.name }}</b></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Actualizar Material</li>
     </ol>
   </nav>
 {% endblock navigation %}
@@ -24,8 +24,8 @@
   <div class="row justify-content-center">
     <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Actualizar Material</h4>
+            <div class="card-header border-bottom">
+                <h4 class="card-title text-uppercase font-weight-bold">Actualizar Material</h4>
             </div>
             <form action="" method="POST">
                 <div class="card-body">
@@ -56,7 +56,7 @@
                                 {% for type in material.types %}
                                     <div class="input-group">
                                         {% if forloop.counter == 1 %}
-                                        <input type="text" name="types[]" id="id_type" value="{{type}}" required class="form-control">
+                                        <input type="text" name="types[]" id="id_type" value="{{type}}" class="form-control">
                                         <a
                                             onClick="addInput()"
                                             id="btn-add"
@@ -81,8 +81,8 @@
                       </div>
                     </div>
                 </div>
-                <div class="card-footer float-right">
-                    <button type="submit" class="btn btn-warning bt-sm">Actualizar</button>
+                <div class="card-footer border-top mt-3">
+                    <button type="submit" class="btn btn-warning btn-block">Actualizar Material</button>
                 </div>
             </form>
         </div>
@@ -92,4 +92,20 @@
 {% endblock content %}
 
 {% block javascripts %}
+<script>
+  const addInput = () => {
+      let container = document.getElementById("container-add-new-element");
+      let newInput = document.createElement('div');
+      newInput.innerHTML = `<div class='form-group'>
+          <input type='text' name='types[]' class='form-control'>
+      </div>`;
+
+      container.appendChild(newInput)
+  }
+
+  window.onload = () => {
+      let btnAdd = document.getEmentById("btn_add");   
+      btnAdd.onclick = addInput;
+  }
+</script>
 {% endblock javascripts %}

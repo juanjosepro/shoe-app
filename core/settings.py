@@ -7,6 +7,7 @@ import os
 from decouple import config
 from unipath import Path
 import dj_database_url
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
@@ -36,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'apps', # Enable the inner apps
-    'apps.product',
     'apps.sizes',
     'apps.category',
     'apps.model',
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.providers_and_customers',
     'apps.sales',
     'crispy_forms',
+    'core.templatetags.change_comma_to_dot'
 ]
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
@@ -91,8 +92,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shoe_app',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -118,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'es-PE'
 
 TIME_ZONE = 'America/Lima'
 
@@ -127,6 +132,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#no working...
+DECIMAL_SEPARATOR = '.'
+THOUSAND_SEPARATOR = ' '
 
 #############################################################
 # SRC: https://devcenter.heroku.com/articles/django-assets
@@ -144,8 +153,6 @@ STATICFILES_DIRS = (
 #############################################################
 
 # color alert whit bootstrap
-from django.contrib.messages import constants as messages
-
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
     messages.INFO: 'alert-info',

@@ -1,21 +1,30 @@
 from django import forms
-from django.forms import ValidationError
 from .models import Model
 
+
 class ModelForm(forms.ModelForm):
-    
-    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off'}))
-    price = forms.CharField(widget=forms.TextInput(attrs={'type':'number', 'class':'form-control'}))
 
-    """ def clean_name(self):
-    name = self.cleaned_data['name']
-    exists = Model.objects.filter(name__iexact = name).exists()
-    if exists:
-        raise ValidationError('Este nombre ya existe!')
-    
-    return name """
+    def clean_name(self):
+        try:
+            model = Model.objects.get(
+                name__iexact=self.cleaned_data['name'].strip())
+            if not self.instance.pk:
+                raise forms.ValidationError('Este modelo ya existe')
+            elif self.instance.pk != model.pk:
+                raise forms.ValidationError(
+                    'Cambio no permitido el modelo ya existe')
+        except Model.DoesNotExist:
+            pass
+        return self.cleaned_data['name']
 
-    
     class Meta:
         model = Model
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['name'].widget.attrs.update({
+            'class': 'form-control',
+            'autocomplete': 'off',
+        })

@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,get_object_or_404, redirect
+from django.core.paginator import Paginator
+from django.http import Http404
 from .models import Material
 from .forms import MaterialForm
 from django.contrib import messages
@@ -8,7 +10,29 @@ from django.contrib import messages
 @login_required(login_url="/login/")
 def index(request):
     materials = Material.objects.all()
-    data = {'materials': materials, 'form': MaterialForm}
+    
+    modified_material = []
+    for material in materials:
+        if not material.types:
+            material.types = []
+        else:
+            material.types = material.types.split(',')
+        modified_material.append(material)
+
+    materials = modified_material
+
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(materials, 16)
+        materials = paginator.page(page)
+    except:
+        raise Http404
+    data = {
+        'entity': materials,
+        'paginator': paginator,
+        'form': MaterialForm
+    }
 
     if request.method == 'POST':
         types = []
@@ -20,12 +44,13 @@ def index(request):
         
         formulario = MaterialForm(data={
             'name': request.POST['name'],
-            'types': ", ".join(types),
+            'types': ",".join(types),
         })
 
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Material agregado satisfactoriamente')
+            return redirect(to='materials.index')
         else:
             data['form'] = formulario
             messages.error(request, 'Error al crear el modelo')
@@ -51,7 +76,7 @@ def update(request, name):
 
         formulario = MaterialForm(data={
             'name': request.POST['name'],
-            'types': ", ".join(types)
+            'types': ",".join(types)
         }, instance=material)
         
         if formulario.is_valid():
