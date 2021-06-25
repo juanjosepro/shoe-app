@@ -112,7 +112,9 @@ def confirm_selected_items(request):
     total = 0
 
     for id in dozens:
-        item = Dozen.objects.get(id = id)        
+        print(id)
+        item = Dozen.objects.get(id = id)
+        print(item)        
         model = item.model.sizesandmodels_set.get(size_id = item.size_id)
         item.price = model.price
         total += model.price
@@ -144,7 +146,6 @@ def store(request):
         'form': SalesForm()
     }
 
-    print(request.POST)
     if request.method == 'POST':
         money_paid = 0
         if not request.POST['just_a_quantity'].strip():

@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Actualizar Existencias {%endblock %}
+
+{% block navigation %}
+<nav aria-label="breadcrumb" role="navigation" class="mt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;">Materiales</a></li>
+    <li class="breadcrumb-item text-capitalize">
+      <a href="javascript:;">{{ inventory.material.name }}</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Actualizar Existencias</li>
+  </ol>
+</nav>
+{% endblock navigation %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-12 col-sm-8 col-md-6">
+    <div class="card">
+      <div class="card-header border-bottom">
+        <h4 class="card-title text-uppercase font-weight-bold">Solo puede Actualizar las Existencias</h4>
+      </div>
+      <form action="" method="POST">
+        <div class="card-body">
+          {% csrf_token %}
+          {{form | crispy}}
+        </div>
+        <div class="card-footer border-top mt-3">
+          <button type="submit" class="btn btn-warning btn-block">
+            Actualizar Existencias
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

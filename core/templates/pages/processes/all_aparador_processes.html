@@ -1,0 +1,245 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Procesos de Aparado {% endblock %}
+
+{% block navigation %}
+  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Procesos de Aparado</a></li>
+      <li class="breadcrumb-item text-capitalize active" aria-current="page">{{filter_by}}</li>
+    </ol>
+  </nav>
+{% endblock navigation %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-12 col-sm-3 col-md-3 ml-auto">
+      <div class="dropdown show">
+        <a
+            class="btn btn-default btn-block btn-sm dropdown-toggle"
+            href="#"
+            role="button"
+            id="dropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+        >
+            Filtrar por
+        </a>
+
+        <div
+            class="dropdown-menu"
+            aria-labelledby="dropdownMenuLink"
+            style="width: 100%"
+        >
+          <a class="dropdown-item" href="{% url 'processes.aparador.index' 'todos' %}">
+              Todos
+          </a>
+          <a
+              class="dropdown-item"
+              href="{% url 'processes.aparador.index' 'aparado-en-produccion' %}">
+              Aparado en producción
+          </a>
+          <a class="dropdown-item" href="{% url 'processes.aparador.index' 'aparado-completado' %}">
+              Aparado completado
+          </a>
+        </div>
+      </div>
+    </div>
+  {% if entity %}
+    <div class="col-12 col-sm-12 col-md-12">
+      <div class="card">
+        <div class="card-body pt-0">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Aparador</th>
+                      <th>Estado de aparado</th>
+                      <th>Categoria</th>
+                      <th>Modelo</th>
+                      <th>Talla</th>
+                      <th>Material</th>
+                      <th>Color</th>
+                      <th class="text-right">Docena recibida el dia</th>
+                      <th class="text-right">Acciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+              {% for process in entity %}
+                  <tr>
+                      <td class="text-uppercase">{{ process.dozen.id }}</td>
+                      <td class="text-uppercase">{{ process.user }}</td>
+                      {% if process.status == "produccion" %}
+                      <td><span class="badge badge-pill badge-warning">en {{ process.status }}</span></td>
+                      {% else %}
+                      <td><span class="badge badge-pill badge-info">{{ process.status }}</span></td>
+                      {% endif %}
+                      <td class="text-uppercase">{{ process.dozen.model.category }}</td>
+                      <td class="text-uppercase">{{ process.dozen.model }}</td>
+                      <td>{{ process.dozen.size }} <small class="text-muted">({{process.dozen.size.size}})</small></td>
+                      <td>{{ process.dozen.material }}</td>
+                      <td>{{ process.dozen.color }}</td>
+                      <td class="text-right">{{ process.created_at }}</td>
+                      <td class="td-actions text-right">
+                          {% if process.status == 'produccion' %}
+                          <a onclick="selectItem({{process.id}}, '{{process.dozen.model}}', '{{process.user}}')"
+                              rel="tooltip" class="btn btn-warning"
+                              data-placement="top" title="Cambiar estado"
+                              data-toggle="modal" data-target="#modalFormChangeStatus">
+                              <i class="material-icons text-white">published_with_changes</i>
+                          </a>
+                          {% else %}
+                          <a rel="tooltip" class="btn btn-default"
+                              data-placement="top" title="Esta docena ya termino el proceso de aparado"
+                              >
+                              <i class="material-icons">hide_source</i>
+                          </a>
+                          {% endif %}
+                      </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            {% include 'paginator.html' %}
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="modalFormChangeStatus" tabindex="-1" role="dialog" aria-labelledby="modalFormChangeStatus" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-uppercase font-weight-bold" id="modalFormChangeStatus">Cambiar Estado del proceso de aparado</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+              <div class="modal-body">
+                <form>
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <div><label for="id_model">Modelo*</label></div>
+                    <input type="text" name="model" id="id_model" readonly required class="form-control">
+                    <input type="hidden" name="dozen" id="id_dozen">
+                  </div>
+                  <div class="form-group">
+                    <div><label>El aparador de esta docena es</label></div>
+                    <input type="text" id="id_user_readonly" readonly required class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Estados del proceso*</label>
+                    <select name="status" id="id_status" class="form-control" required>
+                    {% for key, value in statuses %}
+                      <option value="{{key}}">{{value}}</option>
+                    {% endfor %}
+                    </select>
+                    <small id="status_error" class="text-danger"></small>
+                  </div>
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Nota</label>
+                    <textarea name="note" rows="3" id="id_note" class="form-control"></textarea>
+                    <small id="note_error" class="text-danger"></small>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" onclick="changeStatus()" class="btn btn-warning btn-block">
+                  Cambiar estado
+                </button>
+              </div>
+          </div>
+        </div>
+      </div>
+  {% else %}
+  </div>
+  <div class="loader">Loading...</div>
+  <h4 class="d-flex justify-content-center text-center text-muted">
+    Aun no existe ningun proceso de producción de aparado
+  </h4>
+  {% endif %}
+
+{% endblock content %}
+
+{% block javascripts %}
+  <script>
+    const selectItem = (id, model, userName) => {
+      const modelReadonly = document.getElementById('id_model')
+      const userReadonly = document.getElementById('id_user_readonly')
+      const dozen = document.getElementById('id_dozen')
+      modelReadonly.value = model
+      userReadonly.value = userName
+      dozen.value = id
+    }
+
+    const changeStatus = () => {
+      const statusError = document.getElementById('status_error')
+      statusError.innerHTML = ''
+
+      const idDozen = document.getElementById('id_dozen').value
+      const status = document.getElementById('id_status').value
+      const note = document.getElementById('id_note').value
+
+      existsErrors = 0
+
+      if(!idDozen){
+        alert('Existe un problema con este campo por favor recargue la pagina e intentelo nuevamente')
+        existsErrors++
+      }
+      if(!status) {
+        statusError.innerHTML = 'Seleccione una opcion de estado'
+        existsErrors++
+      }
+
+      if (!existsErrors) {
+        data = JSON.stringify({
+          dozen: idDozen,
+          status: status,
+          note: note,
+        })
+
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const defaults = {
+            'method': 'POST',
+            'body': data,
+            'headers': new Headers({
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }),
+        };
+
+        fetch('/actualizar-docena-del-aparador-a-finalizado/'+idDozen+'/', defaults)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+            location.reload();
+          })
+          .catch(err => {
+            console.log(err)
+            $('#modalFormChangeStatus').modal('show');
+          })
+      }
+    }
+  </script>
+{% endblock javascripts %}

@@ -26,6 +26,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Application definition
+
 INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
@@ -36,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'apps', # Enable the inner apps
+    'apps',
     'apps.sizes',
     'apps.category',
     'apps.model',
@@ -45,13 +46,14 @@ INSTALLED_APPS = [
     'apps.inventory',
     'apps.providers_and_customers',
     'apps.sales',
+    'apps.processes',
+    'apps.user',
     'crispy_forms',
     'core.templatetags.change_comma_to_dot'
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-CRISPY_TEMPLATE_PACK='bootstrap4'
-
-X_FRAME_OPTIONS='SAMEORIGIN'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,7 +67,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-LOGIN_REDIRECT_URL = "home"   # Route defined in apps/urls.py
+LOGIN_REDIRECT_URL = "home"  # Route defined in apps/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in apps/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "core/templates")  # ROOT dir for templates
 
@@ -95,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shoe_app',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'eloisa08',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -119,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -133,7 +134,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-#no working...
+# no working...
 DECIMAL_SEPARATOR = '.'
 THOUSAND_SEPARATOR = ' '
 
@@ -162,3 +163,4 @@ MESSAGE_TAGS = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'user.User'

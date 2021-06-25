@@ -21,7 +21,7 @@ class ProvidersAndCustomers(models.Model):
     direction = models.TextField(max_length=255, blank=True, verbose_name='Direción')
     description = models.TextField(max_length=255, blank=True, verbose_name='Descripcion')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creacion')
-    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
 
     class Meta:
         db_table = 'providers_and_custormers'

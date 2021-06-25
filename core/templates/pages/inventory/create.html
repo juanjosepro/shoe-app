@@ -17,6 +17,8 @@
 </nav>
 {% endblock navigation %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-12 col-sm-8 col-md-6">
@@ -27,7 +29,65 @@
       <form action="" method="POST">
         <div class="card-body">
           {% csrf_token %}
-          <div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <div><label for="id_material">Material*</label></div>
+
+                <input
+                  class="form-control"
+                  required
+                  type="text"
+                  readonly
+                  name="material_name"
+                  id="id_material"
+                  value="{{ material }}"
+                />
+                <input
+                  type="hidden"
+                  name="materials"
+                  value="{{material.id}}"
+                />
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    {% for error in form.material.errors %}
+                    <small class="form-text text-danger font-weight-bold"
+                      >{{ error }}</small
+                    >
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if material.types %}
+            <div class="row">
+              <div class="col-12">
+                <div id="container-add-new-element" class="form-group">
+                  <label for="id_type">Tipo de material</label>
+                  <select name="type2" id="id_type" class="form-control">
+                    <option value="" selected="">---------</option>
+                    {% for type in material.types %}
+                    <option value="{{type}}">{{type}}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="row">
+                    <div class="col-12">
+                      {% for error in form.types.errors %}
+                      <small class="form-text text-danger font-weight-bold"
+                        >{{ error }}</small
+                      >
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% else %}
+              <input type="hidden" name="type2" value="">
+            {% endif %}
+          {{form | crispy}}
+          {% comment %} <div>
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
@@ -152,14 +212,61 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> {% endcomment %}
         </div>
-        <div class="card-footer border-top mt-3">
-          <button type="submit" class="btn btn-success btn-block">Agregar al inventario</button>
+        <div x-data="confirm()" class="card-footer border-top mt-3">
+          <a @click="ok()" x-show="!show" type="buttom" class="btn btn-success btn-block"
+          data-toggle="modal" data-target="#modalFormConfirm">
+            Agregar al inventario
+          </a>
+          <button x-show="show" type="submit" class="btn btn-success btn-block">Agregar al inventario</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalFormConfirm" tabindex="-1" role="dialog" aria-labelledby="modalFormConfirm" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center text-uppercase font-weight-bold" id="modalFormConfirm">System message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body">
+            <blockquote class="blockquote text-center">
+              <p>
+              Porfavor verifique que todos los datos ingresados en el formulario
+              sean correctos. Puesto que, luego de ser registrados <b>NO</b> podran ser
+              <b>MODIFICADOS</b>
+              </p>
+              <footer class="blockquote-footer">
+                Si todos los datos son correctos presione nuevamente en el
+                boton de Agregar al inventario.
+              </footer>
+            </blockquote>
+          </div>
+          <div class="modal-footer">
+            <button type="buttom" class="btn btn-success btn-block" data-dismiss="modal">
+              Entendido
+            </button>
+          </div>
+      </div>
     </div>
   </div>
 </div>
 
 {% endblock content %}
+
+{% block javascripts %}
+<script>
+  function confirm(){
+    return {
+        show: false,
+        ok(){this.show = true}
+    }
+  }
+</script>
+{% endblock javascripts %}

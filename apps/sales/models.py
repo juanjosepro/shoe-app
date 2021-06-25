@@ -19,7 +19,7 @@ class Sales(models.Model):
     status = models.CharField(choices=statuses,default='al contado', max_length=30, verbose_name='Estado')
     note = models.TextField(max_length=250, blank=True, verbose_name='Nota')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creacion')
-    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualizacion')
 
     class Meta:
         db_table = 'sales'

@@ -1,11 +1,11 @@
 {% with request.resolver_match.url_name as url_name %}
-<div class="sidebar" data-color="green" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
+<div class="sidebar" data-color="orange" data-background-color="red" data-image="/static/assets/img/sidebar-1.jpg">
   <div class="logo">
-    <a rel="noopener noreferrer" href="#" class="simple-text logo-mini">
+    <a rel="noopener noreferrer" href="#" class="simple-text logo-mini text-white">
       SP
     </a>
     <a rel="noopener noreferrer" 
-      href="#" class="simple-text logo-normal">
+      href="#" class="simple-text logo-normal text-white">
       Shoe App
     </a>
   </div>
@@ -18,36 +18,12 @@
           <p>Dashboard</p>
         </a>
       </li>
-      {% comment %} <li class="nav-item {% if url_name == 'products.filter-by-name' %} active {% endif %}">
-        <a class="nav-link" data-toggle="collapse" href="#product" aria-expanded="true">
-          <i class="material-icons">dashboard_customize</i>
-          <p>Productos
-            <b class="caret"></b>
-          </p>
+      <li class="nav-item {% if url_name == 'sizes.index' %} active {% endif %}">
+        <a class="nav-link" href="{% url 'sizes.index' %}">
+          <i class="material-icons">label_important</i>
+          <p>Tallas</p>
         </a>
-        <div class="collapse" id="product">
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="modal" data-target="#modalFormProduct">
-                <span class="sidebar-mini"> CP </span>
-                <span class="sidebar-normal">Crear Producto</span>
-              </a>
-            </li>
-            <a class="nav-link py-0">
-              <span class="text-center">MIS PRODUCTOS</span>
-            </a>
-            <div x-data="getProducts()" x-init="init">
-              <template x-for="(product, i) in products" :key="product.pk">
-                <li class="nav-item">
-                  <a class="nav-link" :href="`/producto/${product.fields.name}/`">
-                    <span class="sidebar-normal" x-text="`${i+1}. ${product.fields.name}`"></span>
-                  </a>
-                </li>
-              </template>
-            </div>
-          </ul>
-        </div>
-      </li> {% endcomment %}
+      </li>
       <li class="nav-item {% if url_name == 'categories.index' %} active {% endif %}">
         <a class="nav-link" href="{% url 'categories.index' %}">
           <i class="material-icons">category</i>
@@ -55,9 +31,144 @@
         </a>
       </li>
       <li class="nav-item 
+        {% if url_name == 'dozens.store' %} active {% endif %}
+        {% if url_name == 'dozens.index' %} active {% endif %}
+        {% if url_name == 'dozens.dozens_for_the_aparador' %} active {% endif %}
+        {% if url_name == 'dozens.dozens_for_the_armador' %} active {% endif %}"
+      >
+        <a class="nav-link" data-toggle="collapse" href="#manage-dozens" aria-expanded="true">
+          <i class="material-icons">card_travel</i>
+          <p>Gestion de Docenas
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="manage-dozens">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'models.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'models.index' %}">
+                <span class="sidebar-mini"> RND </span>
+                <span class="sidebar-normal">Registrar Nueva Docena</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'dozens.search' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.search' %}">
+                <span class="sidebar-mini"> BDC </span>
+                <span class="sidebar-normal">Buscar docena por codigo</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'dozens.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.index' 'todos' %}">
+                <span class="sidebar-mini"> VTD </span>
+                <span class="sidebar-normal">Ver todas las Docenas</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'dozens.dozens_for_the_aparador' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.dozens_for_the_aparador' %}">
+                <span class="sidebar-mini"> DPA </span>
+                <span class="sidebar-normal">Docenas para el aparado</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'dozens.dozens_for_the_armador' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.dozens_for_the_armador' %}">
+                <span class="sidebar-mini"> DPA </span>
+                <span class="sidebar-normal">Docenas para el armado</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'dozens.dozens_for_the_rematador' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.dozens_for_the_rematador' %}">
+                <span class="sidebar-mini"> DPR </span>
+                <span class="sidebar-normal">Docenas para rematar</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item 
+        {% if url_name == 'processes.aparador.index' %} active {% endif %}
+        {% if url_name == 'processes.armador.index' %} active {% endif %}"
+      >
+        <a class="nav-link" data-toggle="collapse" href="#process" aria-expanded="true">
+          <i class="material-icons">card_travel</i>
+          <p>Procesos
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="process">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'processes.aparador.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'processes.aparador.index' 'todos' %}">
+                <span class="sidebar-mini"> AP </span>
+                <span class="sidebar-normal">Procesos de Aparado</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'processes.armador.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'processes.armador.index' 'todos' %}">
+                <span class="sidebar-mini"> AR </span>
+                <span class="sidebar-normal">Procesos de Armado</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item 
+        {% if url_name == 'providers.show' %} active {% endif %}
+        {% if url_name == 'customers.show' %} active {% endif %}"
+      >
+        <a class="nav-link" data-toggle="collapse" href="#customers-and-providers" aria-expanded="true">
+          <i class="material-icons">card_travel</i>
+          <p>Clientes/Proveedores
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="customers-and-providers">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'providers.show' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'providers.show' 'proveedor' 'todos' %}">
+                <span class="sidebar-mini"> P </span>
+                <span class="sidebar-normal">Proveedores</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'customers.show' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'customers.show' 'cliente' 'todos' %}">
+                <span class="sidebar-mini"> C </span>
+                <span class="sidebar-normal">Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item 
+        {% if url_name == 'dozens.index' %} active {% endif %}
+        {% if url_name == 'sales.index' %} active {% endif %}"
+      >
+        <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
+          <i class="material-icons">card_travel</i>
+          <p>Ventas
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="sales">
+          <ul class="nav">
+            <li class="nav-item {% if url_name == 'dozens.dozens_ready_to_sell' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.dozens_ready_to_sell' %}">
+                <span class="sidebar-mini"> RV </span>
+                <span class="sidebar-normal">Realizar Venta</span>
+              </a>
+            </li>
+            </li>
+            <li class="nav-item {% if url_name == 'sales.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'sales.index' %}">
+                <span class="sidebar-mini"> VR </span>
+                <span class="sidebar-normal">Ventas Realizadas</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item 
         {% if url_name == 'materials.index' %} active {% endif %}
         {% if url_name == 'inventory.index' %} active {% endif %}
-        {% if url_name == 'dozens.index' %} active {% endif %}"
+        {% if url_name == 'dozens.dozens_ready_to_sell' %} active {% endif %}"
       >
         <a class="nav-link" data-toggle="collapse" href="#inventory" aria-expanded="true">
           <i class="material-icons">fact_check</i>
@@ -80,50 +191,10 @@
                 <span class="sidebar-normal">Inventario</span>
               </a>
             </li>
-            <li class="nav-item {% if url_name == 'dozens.index' %} active {% endif %}">
-              <a class="nav-link" href="{% url 'dozens.index' %}">
-                <span class="sidebar-mini"> DOC </span>
-                <span class="sidebar-normal">Docenas</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </li>
-      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'providers.show' 'proveedor' 'todos' %}">
-          <i class="material-icons">recent_actors</i>
-          <p>Proveedores</p>
-        </a>
-      </li>
-      <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'customers.show' 'cliente'  'todos' %}">
-          <i class="material-icons">switch_account</i>
-          <p>Clientes</p>
-        </a>
-      </li>
-      <li class="nav-item 
-        {% if url_name == 'dozens.index' %} active {% endif %}
-        {% if url_name == 'sales.index' %} active {% endif %}"
-      >
-        <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
-          <i class="material-icons">card_travel</i>
-          <p>Ventas
-            <b class="caret"></b>
-          </p>
-        </a>
-        <div class="collapse" id="sales">
-          <ul class="nav">
-            <li class="nav-item {% if url_name == 'dozens.index' %} active {% endif %}">
-              <a class="nav-link" href="{% url 'dozens.index' %}">
-                <span class="sidebar-mini"> RV </span>
-                <span class="sidebar-normal">Realizar Venta</span>
-              </a>
-            </li>
-            </li>
-            <li class="nav-item {% if url_name == 'sales.index' %} active {% endif %}">
-              <a class="nav-link" href="{% url 'sales.index' %}">
-                <span class="sidebar-mini"> VR </span>
-                <span class="sidebar-normal">Ventas Realizadas</span>
+            <li class="nav-item {% if url_name == 'dozens.dozens_ready_to_sell' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'dozens.dozens_ready_to_sell' %}">
+                <span class="sidebar-mini"> DPV </span>
+                <span class="sidebar-normal">Docenas para vender</span>
               </a>
             </li>
           </ul>

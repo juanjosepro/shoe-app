@@ -35,6 +35,8 @@
     <link href="/static/assets/demo/demo.css" rel="stylesheet" />
     <link href="/static/assets/css/form.css" rel="stylesheet" />
     <link href="/static/assets/css/select2.css" rel="stylesheet" />
+    <link href="/static/assets/css/my-datatable.css" rel="stylesheet" />
+    <link href="/static/assets/css/my-style/loader.css" rel="stylesheet"/>
 
     <style>
       tbody tr:hover {
@@ -122,7 +124,6 @@
               <span class="navbar-toggler-icon icon-bar"></span>
               <span class="navbar-toggler-icon icon-bar"></span>
             </button>
-
             {% if user.is_authenticated %}
             <div class="collapse navbar-collapse justify-content-end">
               <form class="navbar-form">
@@ -210,62 +211,6 @@
         <div class="content">
           <div class="container-fluid">
             {% block content %}{% endblock content %}
-
-            <!-- Modal -->
-            <div
-              class="modal fade"
-              id="modalFormProduct"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="modalFormProduct"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalFormProduct">
-                      Crear un nuevo Producto
-                    </h5>
-                    <button
-                      type="button"
-                      class="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <form action="{% url 'products.store' %}" method="POST">
-                    <div class="modal-body">
-                      {% csrf_token %}
-                      <div class="form-group">
-                        <label for="recipient-name"
-                          >Nombre del Producto</label
-                        >
-                        <input
-                          type="text"
-                          name="name"
-                          class="form-control"
-                          id="recipient-name"
-                        />
-                      </div>
-                    </div>
-                    <div class="modal-footer py-0">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-dismiss="modal"
-                      >
-                        Cerrar
-                      </button>
-                      <button type="submit" class="btn btn-success">
-                        Guardar
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -279,6 +224,7 @@
 
     <!-- Specific Page JS goes HERE  -->
     {% block javascripts %}{% endblock javascripts %}
+
     <script>
       setTimeout(() => {
         if ($("#alert").length > 0) {

@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models.deletion import PROTECT
 from apps.category.models import Category
 from apps.sizes.models import Sizes
+
+
 class Model(models.Model):
     
     category = models.ForeignKey(
@@ -23,7 +25,7 @@ class Model(models.Model):
         help_text='¿Que tallas va  a tener este modelo?',
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
-    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
 
     class Meta:
         db_table = 'models'
@@ -41,7 +43,7 @@ class SizesAndModels(models.Model):
         help_text='Precio de este talla',
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
-    update_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
 
     class Meta:
         db_table = 'sizes_and_models_pivot'

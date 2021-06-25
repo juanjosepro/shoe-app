@@ -8,10 +8,9 @@ from django.db.models.functions import TruncDay
 from django.db.models import Count
 from django.db.models import Q
 from .models import Inventory
-from .forms import InventoryForm
+from .forms import InventoryForm, UpdateStockForm
 
-# Create your views here.
-
+from datetime import datetime, timedelta
 
 # not WORNIG...
 @login_required(login_url="/login/")
@@ -39,7 +38,6 @@ def index(request):
 @login_required(login_url="/login/")
 def store(request, name):
     material = get_object_or_404(Material, name=name)
-
     types = []
 
     if material.types:
@@ -48,17 +46,23 @@ def store(request, name):
 
     material.types = types
 
-    data = {'material': material, 'form': InventoryForm}
+    data = {'material': material, 'form': InventoryForm()}
 
     if request.method == 'POST':
-        formulario = InventoryForm(data={
-            'material': request.POST['material'],
-            'type': request.POST['type'],
-            'amount': request.POST['amount'],
-            'color': request.POST['color'],
-            'price': request.POST['price'],
-            'note': request.POST['note'],
-        })
+        if material.id == int(request.POST['materials']):#validations
+            formulario = InventoryForm(data={
+                'material': material.id,
+                'provider': request.POST['provider'],
+                'type': request.POST['type2'],
+                'amount': request.POST['amount'],
+                'stock': request.POST['amount'],#same as the amount when registering
+                'color': request.POST['color'],
+                'price': request.POST['price'],
+                'note': request.POST['note'],
+            })
+        else:
+            messages.error(request, 'A sucedido un error inesperado por fabor intentelo nuevamente')
+            return redirect(to='inventory.show', name=material.name)
 
         if formulario.is_valid():
             formulario.save()
@@ -105,9 +109,9 @@ def filter(request, name, filter):
         #param = amount >= 1
         inventory = Inventory.objects.filter(Q(amount__gte=1) & Q(
             material_id=material.id)).order_by('-created_at')
-    if filter == 'vendidos':
+    if filter == 'agotados':
         #param = amount <= 0
-        inventory = Inventory.objects.filter(amount__lte=0) & Inventory.objects.filter(
+        inventory = Inventory.objects.filter(stock__lte=0) & Inventory.objects.filter(
             material_id=material.id).order_by('-created_at')
 
     page = request.GET.get('page', 1)
@@ -143,7 +147,16 @@ def update(request, id):
     }
 
     if request.method == 'POST':
-        formulario = InventoryForm(data=request.POST, instance=inventory)
+        formulario = InventoryForm(data={
+            'material': inventory.material.id,
+            'provider': request.POST['provider'],
+            'type': request.POST['type'],
+            'amount': request.POST['amount'],
+            'stock': request.POST['amount'],#same as the amount when registering
+            'color': request.POST['color'],
+            'price': request.POST['price'],
+            'note': request.POST['note'],
+        }, instance=inventory)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Actualizado satisfactoriamente")
@@ -154,3 +167,44 @@ def update(request, id):
             messages.error(request, "Error al actualizar")
 
     return render(request, 'pages/inventory/update.html', data)
+
+
+@login_required(login_url="/login/")
+def update_stock(request, id):
+    inventory = get_object_or_404(Inventory, id=id)
+
+    date = inventory.created_at
+    print(date)
+    date2 =  date + timedelta(days = 1)
+    print(date2)
+    now = datetime.now()
+    print(now)
+
+    if now == date:
+        print('soniguales')
+    else:
+        print('no lo son')
+
+
+    types = []
+
+    if inventory.material.types:
+        for type in inventory.material.types.split(','):
+            types.append(type.strip())
+
+    data = {
+        'form': UpdateStockForm(instance=inventory),
+        'material_types': types,
+        'inventory': inventory  # for the navigation route
+    }
+    if request.method == 'POST':
+        if int(request.POST['stock']) <= inventory.amount:
+            inventory.stock = int(request.POST['stock'])
+            inventory.save()
+            messages.success(request, "Existencias actualizadas satisfactoriamente")
+            return redirect(to='inventory.show', name=inventory.material.name)
+
+        messages.error(request, "Las existencias no pueden ser mayor al monto inicial!")
+        return redirect(to='inventory.update_stock', id=inventory.id)
+
+    return render(request, 'pages/inventory/update_stock.html', data)

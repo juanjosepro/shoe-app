@@ -1,0 +1,20 @@
+.badge-gold {
+    background-color: gold;
+    color:#fff;
+}
+.badge-coral {
+    background-color: coral;
+    color:#fff;
+}
+.badge-blue {
+    background-color: blue;
+    color:#fff;
+}
+.dataTables_filter{
+    float:right;
+    width:250px;
+    margin-top:20px;
+}
+.dataTables_filter label{
+    width:100%;
+}

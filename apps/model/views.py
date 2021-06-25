@@ -13,18 +13,14 @@ from .forms import ModelForm
 # not working...
 @login_required(login_url="/login/")
 def index(request):
-    models = Model.objects.all().order_by('-created-at')
-    page = request.GET.get('page', 1)
-
-    try:
-        paginator = Paginator(models, 16)
-        models = paginator.page(page)
-    except:
-        raise Http404
-
+    models = Model.objects.all().order_by('-created_at')
+    modified_model = []
+    for model in models:
+        model.all_your_sizes = model.sizesandmodels_set.all()
+        modified_model.append(model)
+        
     data = {
-        'entity': models,
-        'paginator': paginator,
+        'entity': modified_model,
     }
 
     return render(request, 'pages/models/index.html', data)
@@ -56,7 +52,7 @@ def show(request, name):
         'paginator': paginator,
     }
 
-    return render(request, 'pages/models/index.html', data)
+    return render(request, 'pages/models/show_models_by_category.html', data)
 
 
 @login_required(login_url="/login/")

@@ -6,7 +6,6 @@
 
 <nav aria-label="breadcrumb" role="navigation" class="mt-3">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
     <li class="breadcrumb-item"><a href="javascript:;">Categoria</a></li>
     <li class="breadcrumb-item text-capitalize">
       <a href="javascript:;">{{category}}</a>
@@ -19,113 +18,126 @@
     </li>
   </ol>
 </nav>
-{% endblock navigation %} {% block content %}
-<div class="row">
-    <div class="col-12 col-sm-3 col-md-3">
-        <a href="{% url 'dozens.store' model %}" class="btn btn-success btn-sm">
-            Agregar nueva docena
-        </a>
-    </div>
-    <div class="col-12 col-sm-3 col-md-3 ml-auto">
-        <div class="dropdown show">
-            <a
-                class="btn btn-default btn-block btn-sm dropdown-toggle"
-                href="#"
-                role="button"
-                id="dropdownMenuLink"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-            >
-                Filtrar por
-            </a>
+{% endblock navigation %}
 
-            <div
-                class="dropdown-menu"
-                aria-labelledby="dropdownMenuLink"
-                style="width: 100%"
-            >
-            <a class="dropdown-item" href="{% url 'dozens.show' model 'todos' %}">
-                Todos
-            </a>
-            <a
-                class="dropdown-item"
-                href="{% url 'dozens.show' model 'disponibles' %}">
-                Disponibles
-            </a>
-            <a class="dropdown-item" href="{% url 'dozens.show' model 'vendidos' %}">
-                Vendidos
-            </a>
-            </div>
-        </div>
-    </div>
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Modelo</th>
-                <th>Cantidad</th>
-                <th>Color</th>
-                <th>Talla</th>
-                <th>Material</th>
-                <th>Estado</th>
-                <th class="text-right">Fecha creación</th>
-                <th class="text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for dozen in entity %}
-              <tr>
-                <td class="text-uppercase">{{ dozen.model }}</td>
-                <td>{{ dozen.amount }}</td>
-                <td>{{ dozen.color }}</td>
-                <td>{{ dozen.size }}</td>
-                <td>{{ dozen.material }}</td>
-                <td>
-                  {% if dozen.status == "disponible" %}
-                  <span class="badge badge-pill badge-success">
-                    {{ dozen.status }}
-                  </span>
-                  {% else %}
-                  <span class="badge badge-pill badge-primary">
-                    {{ dozen.status }}
-                  </span>
-                  {% endif %}
-                </td>
-                <td class="text-right">{{ dozen.created_at }}</td>
-                <td class="td-actions text-right">
-                  <a
-                    href="{% url 'dozens.update' dozen.id %}"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Editar docena"
-                    rel="tooltip"
-                    class="btn btn-warning"
-                  >
-                    <i class="material-icons">edit</i>
-                  </a>
-                  <button
-                    type="button"
-                    rel="tooltip"
-                    class="btn btn-danger"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Working..."
-                  >
-                    <i class="material-icons">search</i>
-                  </button>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% include 'paginator.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col-12 col-sm-3 col-md-3 ml-auto">
+      <div class="dropdown show">
+        <a
+            class="btn btn-default btn-block btn-sm dropdown-toggle"
+            href="#"
+            role="button"
+            id="dropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+        >
+            Filtrar por
+        </a>
+
+        <div
+            class="dropdown-menu"
+            aria-labelledby="dropdownMenuLink"
+            style="width: 100%"
+        >
+          <a class="dropdown-item" href="{% url 'dozens.show' model 'todos' %}">
+              Todos
+          </a>
+          <a class="dropdown-item"
+              href="{% url 'dozens.show' model 'disponibles' %}">
+              Disponibles
+          </a>
+          <a class="dropdown-item"
+              href="{% url 'dozens.show' model 'aparado-en-produccion' %}">
+              Aparado en producción
+          </a>
+          <a class="dropdown-item"
+              href="{% url 'dozens.show' model 'aparado-finalizado' %}">
+              Aparado finalizado
+          </a>
+          <a class="dropdown-item"
+              href="{% url 'dozens.show' model 'armado-en-produccion' %}">
+              Armado en Producción
+          </a>
+          <a class="dropdown-item"
+              href="{% url 'dozens.show' model 'armado-finalizado' %}">
+              Armado finalizado
+          </a>
+          <a class="dropdown-item" href="{% url 'dozens.show' model 'produccion-finalizada' %}">
+              Produccion finalizada
+          </a>
+          <a class="dropdown-item" href="{% url 'dozens.show' model 'vendidos' %}">
+              Vendidos
+          </a>
         </div>
       </div>
     </div>
+    <div class="col-12">
+      {% if entity %}
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Modelo</th>
+                    <th>Color</th>
+                    <th>Talla</th>
+                    <th>Material</th>
+                    <th>Estado</th>
+                    <th class="text-right">Fecha de registro</th>
+                    <th class="text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for dozen in entity %}
+                  <tr>
+                    <td class="text-uppercase">{{ dozen.id }}</td>
+                    <td class="text-uppercase">{{ dozen.model }}</td>
+                    <td>{{ dozen.color }}</td>
+                    <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
+                    <td>{{ dozen.material }}</td>
+                      {% if dozen.status == "disponible" %}
+                          <td><span class="badge badge-pill badge-success">Disponible</span></td>
+                      {% elif dozen.status == "aparado_en_produccion" %}
+                          <td><span class="badge badge-pill badge-gold">Aparado en producción</span></td>
+                      {% elif dozen.status == "aparado_finalizado" %}
+                          <td><span class="badge badge-pill badge-warning">Aparado finalizado</span></td>
+                      {% elif dozen.status == "armado_en_produccion" %}
+                          <td><span class="badge badge-pill badge-primary">Armado en produccion</span></td>
+                      {% elif dozen.status == "armado_finalizado" %}
+                          <td><span class="badge badge-pill badge-blue">Armado finalizado</span></td>
+                      {% elif dozen.status == "produccion_finalizada" %}
+                          <td><span class="badge badge-pill badge-coral">Produccion finalizada</span></td>
+                      {% elif dozen.status == "vendido" %}
+                          <td><span class="badge badge-pill badge-secondary">Vendido</span></td>
+                      {% else %}
+                          <td><span class="badge badge-pill badge-default">{{ dozen.status }}</span></td>
+                      {% endif %}
+                    <td class="text-right">{{ dozen.created_at }}</td>
+                    <td class="td-actions text-right">
+                      <a href="{% url 'dozens.history_of_the_process_of_each_dozen' dozen.id %}"
+                          data-toggle="tooltip" data-placement="bottom" title="Ver historial"
+                          rel="tooltip" class="badge badge-pill badge-secondary px-3 py-1">
+                          Ver Historial
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% include 'paginator.html' %}
+            </div>
+          </div>
+        </div>
+      {% else %}
+      <div class="loader">Loading...</div>
+      <h4 class="d-flex justify-content-center text-center text-muted">
+        Este modelo actualmente no tiene ninguna docena.
+      </h4>
+      {% endif %}
+    </div>
   </div>
-</div>
 {% endblock content %}

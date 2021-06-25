@@ -7,13 +7,15 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
     <li class="breadcrumb-item"><a href="javascript:;">Materiales</a></li>
-    <li class="breadcrumb-item">
-      <a href="javascript:;">{{ inventory.id }}</a>
+    <li class="breadcrumb-item text-capitalize">
+      <a href="javascript:;">{{ inventory.material.name }}</a>
     </li>
     <li class="breadcrumb-item active" aria-current="page">Actualizar Inventario</li>
   </ol>
 </nav>
 {% endblock navigation %}
+
+{% load crispy_forms_tags %}
 
 {% block content %}
 
@@ -26,59 +28,53 @@
       <form action="" method="POST">
         <div class="card-body">
           {% csrf_token %}
-          <div>
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <div><label for="id_material">Material*</label></div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <div><label for="id_material">Material*</label></div>
 
-                  <input
-                    class="form-control"
-                    required
-                    type="text"
-                    readonly
-                    name="material_name"
-                    id="id_material"
-                    value="{{ inventory.material }}"
-                  />
-
-                  <input
-                    type="hidden"
-                    name="material"
-                    value="{{ inventory.material.id }}"
-                  />
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      {% for error in form.material.errors %}
-                      <small class="form-text text-danger font-weight-bold"
-                        >{{ error }}</small
-                      >
-                      {% endfor %}
-                    </div>
+                <input
+                  class="form-control"
+                  required
+                  type="text"
+                  readonly
+                  name="material_name"
+                  id="id_material"
+                  value="{{ inventory.material }}"
+                />
+                <input
+                  type="hidden"
+                  name="materials"
+                  value="{{ inventory.material.id }}"
+                />
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    {% for error in form.material.errors %}
+                    <small class="form-text text-danger font-weight-bold"
+                      >{{ error }}</small
+                    >
+                    {% endfor %}
                   </div>
                 </div>
               </div>
             </div>
-            {% if material_types %}
+          </div>
+          {% if material_types %}
             <div class="row">
               <div class="col-12">
                 <div id="container-add-new-element" class="form-group">
-                  <label for="id_type">Tipo de material*</label>
+                  <label for="id_type">Tipo de material</label>
                   <select name="type" id="id_type" class="form-control">
-                  {% for type in material_types %}
-                    {% if type == inventory.type %}
-                    <option value="{{type}}" selected>{{type}}</option>
-                    {% else %}
+                    {% for type in material_types %}
                     <option value="{{type}}">{{type}}</option>
-                    {% endif %}
-                  {% endfor %}
+                    {% endfor %}
                   </select>
                   <div class="row">
                     <div class="col-12">
                       {% for error in form.types.errors %}
-                      <small class="form-text text-danger font-weight-bold">
-                        {{ error }}
-                      </small>
+                      <small class="form-text text-danger font-weight-bold"
+                        >{{ error }}</small
+                      >
                       {% endfor %}
                     </div>
                   </div>
@@ -86,77 +82,9 @@
               </div>
             </div>
             {% else %}
-            <input type="hidden" name="type">
+              <input type="hidden" name="type" value="">
             {% endif %}
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <label for="id_amount">Cantidad*</label>
-                  {{form.amount}}
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      {% for error in form.amount.errors %}
-                      <small class="form-text text-danger font-weight-bold"
-                        >{{ error }}</small
-                      >
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <label for="id_color">Color</label>
-                  {{form.color}}
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      {% for error in form.color.errors %}
-                      <small class="form-text text-danger font-weight-bold"
-                        >{{ error }}</small
-                      >
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <label for="id_price">Precio*</label>
-                  {{form.price}}
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      {% for error in form.price.errors %}
-                      <small class="form-text text-danger font-weight-bold"
-                        >{{ error }}</small
-                      >
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <label for="id_note">Nota</label>
-                  {{form.note}}
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      {% for error in form.note.errors %}
-                      <small class="form-text text-danger font-weight-bold"
-                        >{{ error }}</small
-                      >
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {{form | crispy}}
         </div>
         <div class="card-footer border-top mt-3">
           <button type="submit" class="btn btn-warning btn-block">

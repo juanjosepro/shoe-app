@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.db.models import Q
 from .models import ProvidersAndCustomers
-from .forms import ProviderAndCustomerForm
+from .forms import ProviderAndCustomerCreateForm, ProviderAndCustomerUpdateForm
 
 
 @login_required(login_url="/login/")
@@ -40,10 +40,10 @@ def show(request, type, filter):
 @login_required(login_url="/login/")
 def store(request):
 
-    data = {'form': ProviderAndCustomerForm}
+    data = {'form': ProviderAndCustomerCreateForm()}
 
     if request.method == 'POST':
-        formulario = ProviderAndCustomerForm(data=request.POST)
+        formulario = ProviderAndCustomerCreateForm(data=request.POST)
 
         if formulario.is_valid():
             formulario.save()
@@ -62,11 +62,14 @@ def store(request):
 
 @login_required(login_url="/login/")
 def update(request, id):
-    model = get_object_or_404(ProvidersAndCustomers, id = id)
-    data = {'form': ProviderAndCustomerForm(instance=model)}
+    provider_or_customer = get_object_or_404(ProvidersAndCustomers, id = id)
+    data = {
+        'form': ProviderAndCustomerUpdateForm(instance=provider_or_customer),
+        'provider_or_customer': provider_or_customer,
+    }
 
     if request.method == 'POST':
-        formulario = ProviderAndCustomerForm(data=request.POST, instance=model)
+        formulario = ProviderAndCustomerUpdateForm(data=request.POST, instance=provider_or_customer)
 
         if formulario.is_valid():
             formulario.save()

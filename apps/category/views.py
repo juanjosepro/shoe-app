@@ -6,7 +6,6 @@ from django.http import Http404
 from django.contrib import messages
 from .models import Category
 from .forms import CategoryForm
-from .models import Category
 
 
 @login_required(login_url="/login/")

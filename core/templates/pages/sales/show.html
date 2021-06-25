@@ -2,12 +2,9 @@
 
 {% block title %} Detalle de ventas {% endblock %}
 
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% block navigation %}
   <nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
       <li class="breadcrumb-item"><a href="javascript:;">Venta</a></li>
       <li class="breadcrumb-item text-capitalize active" aria-current="page">Historial de ventas</li>
     </ol>
@@ -114,9 +111,9 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th>Categoria</th>
                                             <th>Modelo</th>
                                             <th>Precio</th>
-                                            <th>Cantidad</th>
                                             <th>Color</th>
                                             <th>Talla</th>
                                             <th>Material</th>
@@ -126,11 +123,11 @@
                                     <tbody>
                                     {% for dozen in dozen.data %}
                                         <tr>
+                                            <td class="text-uppercase">{{ dozen.model.category }}</td>
                                             <td class="text-uppercase">{{ dozen.model }}</td>
                                             <td>S/ {{ dozen.price | change_comma_to_dot }} </td>
-                                            <td>{{ dozen.amount }}</td>
                                             <td>{{ dozen.color }}</td>
-                                            <td>{{ dozen.size }}</td>
+                                            <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
                                             <td>{{ dozen.material }}</td>
                                             <td class="text-right">
                                             {% if dozen.note %}

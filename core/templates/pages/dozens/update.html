@@ -1,160 +1,42 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Actualizar Docena {% endblock %}
+{% block title %}Actualizar Docena {% endblock %}
 
 {% block navigation %}
   <nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="javascript:;">Dashboard</a></li>
-      <li class="breadcrumb-item"><a href="javascript:;">Categoria</a></li>
-      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">{{category}}</a></li>
-      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">{{model}}</a></li>
-      <li class="breadcrumb-item text-capitalize active" aria-current="page">Actualizar docena</li>
+      <li class="breadcrumb-item"><a href="javascript:;">Docena</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Actualizar Docena</li>
     </ol>
   </nav>
 {% endblock navigation %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
+  
   <div class="row justify-content-center">
-    <div class="col-12 col-sm-12 col-md-6">
+    <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
             <div class="card-header border-bottom">
-                <h4 class="card-title text-uppercase font-weight-bold">Actualizar Docena</h4>
+                <h5 class="card-title font-weight-bold text-uppercase">Actualizar Docena</h5>
             </div>
             <form action="" method="POST">
-            {% csrf_token %}
-            <div class="card-body">
-              <div>
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <div>
-                        <label for="id_model">Modelo*</label>
-                      </div>
-                      <input type="text" name="model_readonly" readonly id="idmodel" class="form-control" value="{{ model.name }}">
-                      <input type="hidden" name="model" value="{{ model.id }}">
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.model.errors %}
-                          <small class="form-text text-danger font-weight-bold"
-                            >{{ error }}</small
-                          >
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label for="id_size" class="mb-0">Talla*</label>
-                      <select name="size" class="form-control" required id="is_size">
-                        {% for size in dozen.all_your_sizes %}
-                          {% if size.id == dozen.size.id %}
-                          <option value="{{size.id}}" selected>{{size}}</option>
-                          {% else %}
-                          <option value="{{size.id}}">{{size}}</option>
-                          {% endif %}
-                        {% endfor %}
-                      </select>
-                    </div>
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.size.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0">
-                          {{ error }}
-                          </small>
-                          {% endfor %}
-                        </div>
-                      </div>
-                  </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{form | crispy}}
                 </div>
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label for="id_amount">Cantidad*</label>
-                      <input type="number" class="form-control"
-                        required name="amount" id="id_amount" value="{{ form.amount.value }}">
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.amount.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0"
-                            >{{ error }}</small>
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label for="id_color">Color*</label>
-                      <input type="text" name="color" id="id_color"
-                       class="form-control" required value="{{ form.color.value }}">
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.color.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0"
-                            >{{ error }}</small>
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label for="id_name" class="mb-0">Material*</label>
-                      {{form.material}}
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.material.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0"
-                            >{{ error }}</small
-                          >
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label for="id_name" class="mb-0">Estado*</label>
-                      {{form.status}}
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.status.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0"
-                            >{{ error }}</small
-                          >
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-12">
-                    <div class="form-group">
-                      <label for="id_note" class="mb-0">Nota</label>
-                      {{form.note}}
-                      <div class="row">
-                        <div class="col-12 col-sm-12">
-                          {% for error in form.note.errors %}
-                          <small class="form-text text-danger font-weight-bold my-0"
-                            >{{ error }}</small
-                          >
-                          {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="card-footer border-top mt-3">
-              <button type="submit" class="btn btn-warning btn-block">Actualizar Docena</button>
+              {% if form.status.value == 'produccion_finalizada' %}
+                <button type="button" disabled class="btn btn-default btn-block ">
+                  Esta docena ya no puede ser modificada
+                </button>
+              {% else %}
+                <button type="submit" class="btn btn-warning btn-block ">Actualizar Docena</button>
+              {% endif %}
             </div>
-          </form>
+            </form>
         </div>
     </div>
   </div>
