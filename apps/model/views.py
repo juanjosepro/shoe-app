@@ -10,93 +10,124 @@ from .models import Model
 from .forms import ModelForm
 
 
-# not working...
+#shows all models to choose which to register a dozen
 @login_required(login_url="/login/")
 def index(request):
-    models = Model.objects.all().order_by('-created_at')
+    models = Model.objects.all().order_by("-created_at")
     modified_model = []
+
     for model in models:
         model.all_your_sizes = model.sizesandmodels_set.all()
         modified_model.append(model)
-        
+
     data = {
-        'entity': modified_model,
+        "models": modified_model,
     }
 
-    return render(request, 'pages/models/index.html', data)
+    return render(request, "pages/models/index.html", data)
 
 
+#shows all models that belong to a category
 @login_required(login_url="/login/")
 def show(request, name):
     category = get_object_or_404(Category, name=name)
-    models = Model.objects.filter(category_id=category.id).order_by('-created_at')
-
+    models = Model.objects.filter(category_id=category.id).order_by("-created_at")
     modified_model = []
+
     for model in models:
         model.all_your_sizes = model.sizesandmodels_set.all()
         modified_model.append(model)
 
-    page = request.GET.get('page', 1)
+    page = request.GET.get("page", 1)
 
     try:
         paginator = Paginator(modified_model, 16)
-        modified_model = paginator.page(page)
+        models = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'category': category,  # for the navigation route
-        # must be called entity required for pagination
-        'entity': modified_model,
-        # necessary for paginator
-        'paginator': paginator,
+        "category": category,  # for the navigation route
+        "entity": models,
+        "paginator": paginator,
     }
 
-    return render(request, 'pages/models/show_models_by_category.html', data)
+    return render(request, "pages/models/show_models_by_category.html", data)
+
+
+#validates that the size and price fields are the same length
+# ejem. sizes['juvenil, 'adulto'] prices['80'] = False
+def verify_that_each_size_has_its_price(sizes, prices):
+        sizes_length, prices_length = 0, 0
+
+        for size in sizes:
+            if size.strip():
+                sizes_length = sizes_length + 1
+        
+        for price in prices:
+            if price.strip():
+                prices_length = prices_length + 1
+        
+        if sizes_length == prices_length:
+            return True
+        
+        return False
 
 
 @login_required(login_url="/login/")
 def store(request, name):
     category = get_object_or_404(Category, name=name.strip())
-    sizes = Sizes.objects.all().order_by('-created_at')
+    sizes = Sizes.objects.all().order_by("-created_at")
 
     data = {
-        'form': ModelForm(),
-        'category': category,  # for the navigation route
-        'sizes': sizes,
+        "form": ModelForm(),
+        "category": category,  # for the navigation route
+        "sizes": sizes,
     }
 
-    if request.method == 'POST':
-        sizes = request.POST.getlist('sizes')
-        prices = request.POST.getlist('prices')
+    if request.method == "POST":
+        sizes = request.POST.getlist("sizes")
+        prices = request.POST.getlist("prices")
         container_of_new_sizes = []
-        
-        if len(sizes) == len(prices):
+
+        #validations
+        if verify_that_each_size_has_its_price(sizes, prices):
+
             for i in range(len(sizes)):
                 obj = {}
-                obj['size'] = int(sizes[i].strip())
-                obj['price'] = Decimal(prices[i].strip())
+                obj["size"] = int(sizes[i].strip())
+                obj["price"] = Decimal(prices[i].strip())
                 container_of_new_sizes.append(obj)
 
-        model_form = ModelForm(data=request.POST)
+            model_form = ModelForm(data=request.POST)
 
-        if model_form.is_valid():
-            model = Model.objects.create(
-                category_id=model_form.cleaned_data['category'].id,
-                name=model_form.cleaned_data['name'],
-            )
+            if model_form.is_valid():
+                model = Model.objects.create(
+                    category_id=model_form.cleaned_data["category"].id,
+                    name=model_form.cleaned_data["name"],
+                )
 
-            for new in container_of_new_sizes:
-                size = Sizes.objects.get(id=new['size'])  # id = id from size
-                model.sizes.add(size, through_defaults={'price': new['price']})
+                for new in container_of_new_sizes:
+                    size = Sizes.objects.get(id=new["size"])  # id = id from size
+                    model.sizes.add(size, through_defaults={"price": new["price"]})
 
-            messages.success(request, 'Modelo creado satisfactoriamente')
-            return redirect(to="models.show", name=category.name)
+                messages.success(request, "Modelo creado satisfactoriamente")
+
+                return redirect(to="models.show", name=category.name)
+            else:
+                messages.error(
+                    request,
+                    "No se pudo crear el modelo, verifique que todos lo campos esten bien e intentelo de nuevo",
+                )
+                data["form"] = model_form
         else:
-            data['form'] = model_form
-            messages.error(request, 'Error al crear el modelo')
+            messages.error(
+                request,
+                "Por favor es necesario que llene correctamente la talla y su respectivo precio",
+            )
+            return redirect(to="models.store", name=category.name)
 
-    return render(request, 'pages/models/create.html', data)
+    return render(request, "pages/models/create.html", data)
 
 
 @login_required(login_url="/login/")
@@ -104,63 +135,78 @@ def update(request, name):
     model = get_object_or_404(Model, name=name)
     model.all_your_sizes = model.sizesandmodels_set.all()
 
-    sizes = Sizes.objects.all().order_by('-created_at')
+    sizes = Sizes.objects.all().order_by("-created_at")
 
     data = {
-        'form': ModelForm(instance=model),
-        'sizes': sizes,
-        'model': model,  # for the navigation route
+        "form": ModelForm(instance=model),
+        "sizes": sizes,
+        "model": model,  # for the navigation route
     }
 
-    if request.method == 'POST':
-        sizes = request.POST.getlist('sizes')
-        prices = request.POST.getlist('price')
+    if request.method == "POST":
+        sizes = request.POST.getlist("sizes")
+        prices = request.POST.getlist("price")
 
-        # only if you decide to add more sizes to that model
-        more_sizes = request.POST.getlist('more_sizes')
-        more_price = request.POST.getlist('more_price')
+        #validations
+        if verify_that_each_size_has_its_price(sizes, prices):
+            # only if you decide to add more sizes to that model
+            more_sizes = request.POST.getlist("more_sizes")
+            more_price = request.POST.getlist("more_price")
+            print(more_sizes)
+            print(more_price)
+            #validations
+            if verify_that_each_size_has_its_price(more_sizes, more_price):
+                print('yes')
+                container_of_existing_sizes, container_of_new_sizes = [], []
 
-        container_of_existing_sizes = []
-        if len(sizes) == len(prices):
-            for i in range(len(sizes)):
-                obj = {}
-                obj['size'] = int(sizes[i].strip())
-                obj['price'] = Decimal(prices[i].strip())
-                container_of_existing_sizes.append(obj)
-
-        container_of_new_sizes = []
-        if len(more_sizes) == len(more_price):
-            for i in range(len(more_sizes)):
-                if more_sizes[i].strip() and more_price[i].strip():
+                for i in range(len(sizes)):
                     obj = {}
-                    obj['size'] = int(more_sizes[i].strip())
-                    obj['price'] = Decimal(more_price[i].strip())
-                    container_of_new_sizes.append(obj)
+                    obj["size"] = int(sizes[i].strip())
+                    obj["price"] = Decimal(prices[i].strip())
+                    container_of_existing_sizes.append(obj)
 
-        # update the field
-        model_form = ModelForm(data=request.POST, instance=model)
+                for i in range(len(more_sizes)):
+                    #in case it comes empty more_sizes[''] more_price[''] it will return false
+                    if more_sizes[i].strip() and more_price[i].strip(): #important
+                        obj = {}
+                        obj["size"] = int(more_sizes[i].strip())
+                        obj["price"] = Decimal(more_price[i].strip())
+                        container_of_new_sizes.append(obj)
 
-        if model_form.is_valid():
-            model_form.save()
+                model_form = ModelForm(data=request.POST, instance=model)
 
-            for existing_size in container_of_existing_sizes:
-                for size in model.all_your_sizes:
-                    if size.size.id == existing_size['size']:  # id = id from size
-                        if size.price != existing_size['price']:
-                            sizesandmodels = model.sizesandmodels_set.get(
-                                id=size.id)
-                            sizesandmodels.price = existing_size['price']
-                            sizesandmodels.save()
+                if model_form.is_valid():
+                    model_form.save()
 
-            if container_of_new_sizes:  # if not empty
-                for new in container_of_new_sizes:
-                    size = Sizes.objects.get(id=new['size'])  # id = id from size
-                    model.sizes.add(size, through_defaults={'price': new['price']})
+                    for existing_size in container_of_existing_sizes:
+                        for size in model.all_your_sizes:
+                            if size.size.id == existing_size["size"]:  # id = id from size
+                                if size.price != existing_size["price"]:
+                                    sizesandmodels = model.sizesandmodels_set.get(id=size.id)
+                                    sizesandmodels.price = existing_size["price"]
+                                    sizesandmodels.save()
 
-            messages.success(request, 'Modelo actualizado satisfactoriamente')
-            return redirect(to='models.show', name=model.category)
+                    if container_of_new_sizes:  # if not empty
+                        for new in container_of_new_sizes:
+                            size = Sizes.objects.get(id=new["size"])  # id = id from size
+                            model.sizes.add(size, through_defaults={"price": new["price"]})
+
+                    messages.success(request, "Modelo actualizado satisfactoriamente")
+                    return redirect(to="models.show", name=model.category)
+                else:
+                    data["form"] = model_form
+                    messages.error(request, "Error al actualizar el modelo verifique que todos los campos esten llenados correctamente")
+            else:
+                messages.error(
+                    request,
+                    "Al agregar nuevas tallas es necesario que llene correctamente la talla y su respectivo precio",
+                )
+                return redirect(to="models.update", name=model.name)
         else:
-            data['form'] = model_form
-            messages.error(request, 'Error al actualizar el modelo')
+            messages.error(
+                request,
+                "Por favor es necesario que llene correctamente la talla y su respectivo precio",
+            )
+            return redirect(to="models.update", name=model.name)
 
-    return render(request, 'pages/models/update.html', data)
+    return render(request, "pages/models/update.html", data)

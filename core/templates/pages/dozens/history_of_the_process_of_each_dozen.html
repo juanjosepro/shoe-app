@@ -2,78 +2,6 @@
 
 {% block title %} Procesos de Aparado {%endblock %}
 
-{% block stylesheets %}
-<style>
-/* Timeline holder */
-ul.timeline {
-    list-style-type: none;
-    position: relative;
-    padding-left: 1.5rem;
-}
-
- /* Timeline vertical line */
-ul.timeline:before {
-    content: ' ';
-    background: #fff;
-    display: inline-block;
-    position: absolute;
-    left: 16px;
-    width: 4px;
-    height: 100%;
-    z-index: 400;
-    border-radius: 1rem;
-}
-
-li.timeline-item {
-    margin: 20px 0;
-}
-
-/* Timeline item arrow */
-.timeline-arrow {
-    border-top: 0.5rem solid transparent;
-    border-right: 0.5rem solid #fff;
-    border-bottom: 0.5rem solid transparent;
-    display: block;
-    position: absolute;
-    left: 2rem;
-}
-
-/* Timeline item circle marker */
-li.timeline-item::before {
-    content: ' ';
-    background: #ddd;
-    display: inline-block;
-    position: absolute;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    left: 11px;
-    width: 14px;
-    height: 14px;
-    z-index: 400;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-
-/*
-*
-* ==========================================
-* FOR DEMO PURPOSES
-* ==========================================
-*
-*/
-body {
-    background: #dbdeeb;
-    background: -webkit-linear-gradient(to right, #dbdeeb, #dbdeeb);
-    background: linear-gradient(to right, #dbdeeb, #dbdeeb);
-    min-height: 100vh;
-}
-
-.text-gray {
-    color: #999;
-}
-</style>
-{% endblock stylesheets %}
-
 {% block navigation %}
 <nav aria-label="breadcrumb" role="navigation" class="mt-3">
   <ol class="breadcrumb">
@@ -88,21 +16,29 @@ body {
 {% endblock navigation %}
 
 {% block content %}
-
-<div class="row">
-    <div class="col-lg-7 mx-auto">
-        
-        <!-- Timeline -->
-        <ul class="timeline">
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <div class="d-flex justify-content-between">
-                    <h2 class="h5 mb-0"><b class="text-capitalize">Modelo:
-                    {{dozen.model}}</b>
-                    </h2>
-                    <small>ID: <b>{{dozen.id}}</b></small>
+ <div class="header text-center">
+    <h3 class="title">Historial de esta docena</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-timeline card-plain mt-0">
+        <div class="card-body pt-0">
+          <ul class="timeline pt-0 mt-0">
+            <li class="timeline-inverted">
+              <div class="timeline-badge danger">
+                <i class="material-icons">card_travel</i>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <div class="d-flex justify-content-between">
+                        <h2 class="h5 mb-0"><b class="text-capitalize">Modelo:
+                        {{dozen.model}}</b>
+                        </h2>
+                        <h2 class="h5 mb-0"><b>ID: {{dozen.id}}</b></h2>
+                    </div>
                 </div>
-                <span class="small text-gray d-block">
+                <div class="timeline-body">
+                  <span class="small text-gray d-block">
                     <i class="fa fa-clock-o mr-1"></i>
                     <b>Fecha de registro de esta docena: </b>{{dozen.created_at}}
                 </span>
@@ -149,12 +85,21 @@ body {
                         <em><s>Ninguno</s></em>
                     {% endif %}
                 </p>
-            </li><li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0"><b class="text-capitalize">Cortador(a):
-                 {{dozen.cortador.user.first_name}} {{dozen.cortador.user.last_name}}</b>
-                </h2>
-                <span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-badge success">
+                <i class="material-icons">extension</i>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h2 class="h5 mb-0"><b class="text-capitalize">Cortador(a):
+                        {{dozen.cortador.user.first_name}} {{dozen.cortador.user.last_name}}</b>
+                    </h2>
+                </div>
+                <div class="timeline-body">
+                  <span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>
                     <b>Fecha de registro de esta docena: </b>{{dozen.cortador.created_at}}
                 </span>
                 <p class="text-small mt-2 font-weight-light">
@@ -164,82 +109,109 @@ body {
                         <em><s>Ninguno</s></em>
                     {% endif %}
                 </p>
+                </div>
+              </div>
             </li>
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0"
-                    ><b class="text-capitalize">Aparador(a):
-                    {% if dozen.aparador %}
-                        {{dozen.aparador.user.first_name}} {{dozen.aparador.user.last_name}}
-                    {% else %}
-                        <em class="text-warning">Aun no a sido asignado</em>
-                    {% endif %} 
-                    </b>
-                </h2>
-                <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
-                    <b>Docena recibida el dia: </b>{{dozen.aparador.created_at}}
-                </span>
-                <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
-                    <b>Docena entregada el dia: </b>{{dozen.aparador.updated_at}}
-                </span>
-                <p class="text-small mt-2 font-weight-light">
-                    <b>Nota: </b> {% if dozen.aparador.note %}
-                        {{dozen.aparador.note}}
-                    {% else %}
-                        <em><s>Ninguno</s></em>
-                    {% endif %}
-                </p>
+            <li class="timeline-inverted">
+              <div class="timeline-badge info">
+                <i class="material-icons">fingerprint</i>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h2 class="h5 mb-0">
+                        <b class="text-capitalize">Aparador(a):
+                        {% if dozen.aparador %}
+                            {{dozen.aparador.user.first_name}} {{dozen.aparador.user.last_name}}
+                        {% else %}
+                            <em class="text-warning">Aun no a sido asignado</em>
+                        {% endif %} 
+                        </b>
+                    </h2>
+                </div>
+                <div class="timeline-body">
+                  <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
+                        <b>Docena recibida el dia: </b>{{dozen.aparador.created_at}}
+                    </span>
+                    <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
+                        <b>Docena entregada el dia: </b>{{dozen.aparador.updated_at}}
+                    </span>
+                    <p class="text-small mt-2 font-weight-light">
+                        <b>Nota: </b> {% if dozen.aparador.note %}
+                            {{dozen.aparador.note}}
+                        {% else %}
+                            <em><s>Ninguno</s></em>
+                        {% endif %}
+                    </p>
+                </div>
+              </div>
             </li>
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0">
-                    <b class="text-capitalize">Armador(a):
-                    {% if dozen.armador %}
-                        {{dozen.armador.user.first_name}} {{dozen.armador.user.last_name}}
-                    {% else %}
-                        <em class="text-warning">Aun no a sido asignado</em>
-                    {% endif %} 
-                    </b>
-                </h2>
-                <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
-                    <b>Docena recibida el dia: </b>{{dozen.armador.created_at}}
-                </span>
-                <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
-                    <b>Docena entregada el dia: </b>{{dozen.armador.updated_at}}
-                </span>
-                <p class="text-small mt-2 font-weight-light">
-                    <b>Nota: </b> {% if dozen.armador.note %}
-                        {{dozen.armador.note}}
-                    {% else %}
-                        <em><s>Ninguno</s></em>
-                    {% endif %}
-                </p>
+            <li>
+              <div class="timeline-badge warning">
+                <i class="material-icons">flight_land</i>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h2 class="h5 mb-0">
+                        <b class="text-capitalize">Armador(a):
+                        {% if dozen.armador %}
+                            {{dozen.armador.user.first_name}} {{dozen.armador.user.last_name}}
+                        {% else %}
+                            <em class="text-warning">Aun no a sido asignado</em>
+                        {% endif %} 
+                        </b>
+                    </h2>
+                </div>
+                <div class="timeline-body">
+                    <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
+                        <b>Docena recibida el dia: </b>{{dozen.armador.created_at}}
+                    </span>
+                    <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
+                        <b>Docena entregada el dia: </b>{{dozen.armador.updated_at}}
+                    </span>
+                    <p class="text-small mt-2 font-weight-light">
+                        <b>Nota: </b> {% if dozen.armador.note %}
+                            {{dozen.armador.note}}
+                        {% else %}
+                            <em><s>Ninguno</s></em>
+                        {% endif %}
+                    </p>
+                </div>
+              </div>
             </li>
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0">
-                    <b class="text-capitalize">Rematador(a): 
-                    {% if dozen.rematador %}
-                        {{dozen.rematador.user.first_name}} {{dozen.rematador.user.last_name}}
-                    {% else %}
-                        <em class="text-warning">Aun no a sido asignado</em>
-                    {% endif %}
-                    </b>
-                </h2>
-                <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
-                    <b>Docena entregada el dia: </b>{{dozen.rematador.created_at}}
-                </span>
-                <p class="text-small mt-2 font-weight-light">
-                    <b>Nota: </b> {% if dozen.rematador.note %}
-                        {{dozen.rematador.note}}
-                    {% else %}
-                        <em><s>Ninguno</s></em>
-                    {% endif %}
-                </p>
+            <li class="timeline-inverted">
+              <div class="timeline-badge primary">
+                <i class="material-icons">verified</i>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h2 class="h5 mb-0">
+                        <b class="text-capitalize">Rematador(a): 
+                        {% if dozen.rematador %}
+                            {{dozen.rematador.user.first_name}} {{dozen.rematador.user.last_name}}
+                        {% else %}
+                            <em class="text-warning">Aun no a sido asignado</em>
+                        {% endif %}
+                        </b>
+                    </h2>
+                </div>
+                <div class="timeline-body">
+                    <span class="small text-gray d-block"><i class="fa fa-clock-o mr-1"></i>
+                        <b>Docena entregada el dia: </b>{{dozen.rematador.created_at}}
+                    </span>
+                    <p class="text-small mt-2 font-weight-light">
+                        <b>Nota: </b> {% if dozen.rematador.note %}
+                            {{dozen.rematador.note}}
+                        {% else %}
+                            <em><s>Ninguno</s></em>
+                        {% endif %}
+                    </p>
+                </div>
+              </div>
             </li>
-        </ul><!-- End -->
-
+          </ul>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 {% endblock content %}

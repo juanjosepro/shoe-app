@@ -21,7 +21,7 @@
 
 {% block content %}
 
-    {% if entity %}
+    {% if dozens %}
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12">
           <div class="card">
@@ -30,7 +30,7 @@
                 <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                   <thead>
                       <tr>
-                          <th>ID</th>
+                          <th>ID &nbsp; &nbsp;</th>
                           <th>Cortador</th>
                           <th>Categoria</th>
                           <th>Modelo</th>
@@ -43,7 +43,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                  {% for dozen in entity %}
+                  {% for dozen in dozens %}
                       <tr>
                           <td class="text-uppercase">{{ dozen.id }}</td>
                           <td class="text-uppercase">{{ dozen.cortador.user.first_name }}</td>
@@ -52,12 +52,12 @@
                           <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
                           <td>{{ dozen.color }}</td>
                           <td>{{ dozen.material }}</td>
-                          <td><span class="badge badge-pill badge-success btn-sm">{{ dozen.status }}</span></td>
+                          <td><span class="badge badge-pill badge-success">{{ dozen.status }}</span></td>
                           <td class="text-right">{{ dozen.created_at }}</td>
                           <td class="td-actions text-right">
                             <a onclick="selectItem({{dozen.id}}, '{{dozen.model}}')"
                               rel="tooltip" class="btn btn-success btn-sm"
-                              data-placement="top" title="Entregar docena al aparador"
+                              data-placement="left" title="Entregar docena al aparador"
                               data-toggle="modal" data-target="#modalFormDelivery">
                               <i class="material-icons text-white">send</i>
                             </a>
@@ -88,13 +88,13 @@
                     {% csrf_token %}
                     <div class="form-group">
                       <div><label for="model_readonly">Modelo*</label></div>
-                      <input type="text" name="cut_name_model" id="model_readonly" readonly required class="form-control">
+                      <input type="text" name="cut_name_model" id="model_readonly" readonly required class="form-control text-uppercase">
                       <input type="hidden" name="dozen" id="id_dozen" readonly required class="form-control">
                       <small id="dozen_error" class="text-danger"></small>
                     </div>
                     <div class="form-group">
-                      <label class="bmd-label-floating">Elija al aparador*</label>
-                      <select name="user" id="id_user" class="form-control" required>
+                      <label class="bmd-label-floating">Elija al aparador que recibirá esta docena*</label>
+                      <select name="user" id="id_user" class="form-control selectpicker" data-style="btn btn-link" required>
                         <option value="">------------</option>
                         {% for aparador in aparadors %}
                           <option value="{{aparador.id}}">{{aparador.first_name}} {{aparador.last_name}}</option>
@@ -109,7 +109,7 @@
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" onclick="delivery()" class="btn btn-success btn-block">
+                  <button type="button" onclick="delivery()" class="btn btn-success btn-block" style="width:100%">
                     Entregar Docena
                   </button>
                 </div>
@@ -126,43 +126,43 @@
 {% endblock content %}
 
 {% block javascripts %}
-  <script src="/static/assets/js/plugins/jquery.dataTables.min.js"></script>
-  <script src="/static/assets/js/my-js/datatables-config.js"></script>
+<script src="/static/assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="/static/assets/js/my-js/datatables-config.js"></script>
 
-  <script>
+<script>
     const selectItem = (id, model) => {
-      const modelReadonly = document.getElementById('model_readonly')
-      const dozen = document.getElementById('id_dozen')
-      model_readonly.value = model
-      dozen.value = id
+        const modelReadonly = document.getElementById('model_readonly')
+        const dozen = document.getElementById('id_dozen')
+        model_readonly.value = model
+        dozen.value = id
     }
     const delivery = () => {
-      const idDozenError = document.getElementById('dozen_error')
-      const idUserError = document.getElementById('user_error')
+        const idDozenError = document.getElementById('dozen_error')
+        const idUserError = document.getElementById('user_error')
 
-      idDozenError.innerHTML = ''
-      idUserError.innerHTML = ''
+        idDozenError.innerHTML = ''
+        idUserError.innerHTML = ''
 
-      const idDozen = document.getElementById('id_dozen').value
-      const idUser = document.getElementById('id_user').value
-      const note = document.getElementById('id_note').value
+        const idDozen = document.getElementById('id_dozen').value
+        const idUser = document.getElementById('id_user').value
+        const note = document.getElementById('id_note').value
 
-      existsErrors = 0
+        existsErrors = 0
 
-      if(!idDozen){
-        idDozenError.innerHTML = 'Existe un problema con este campo por favor recargue la pagina e intentelo nuevamente'
-        existsErrors++
-      }  
-      if(!idUser) {
-        idUserError.innerHTML = 'Elija un aparador para esta docena'
-        existsErrors++
-      }
+        if(!idDozen){
+            idDozenError.innerHTML = 'Existe un problema con este campo por favor recargue la pagina e intentelo nuevamente'
+            existsErrors++
+        }  
+        if(!idUser) {
+            idUserError.innerHTML = 'Es necesario que elija un aparador para esta docena'
+            existsErrors++
+        }
 
-      if (!existsErrors) {
+        if (!existsErrors) {
         data = JSON.stringify({
-          dozen: idDozen,
-          user: idUser,
-          note: note
+            dozen: idDozen,
+            user: idUser,
+            note: note
         })
 
         const getCookie = (name) => {
@@ -185,23 +185,32 @@
             'method': 'POST',
             'body': data,
             'headers': new Headers({
-              'X-CSRFToken': getCookie('csrftoken'),
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }),
         };
 
         fetch('/agregar-docena-a-produccion/', defaults)
-          .then(response => response.json())
-          .then(data => {
-            location.reload();
-          })
-          .catch(err => {
-            console.log(err)
-              $('#modalFormDelivery').modal('show');
-          })
-      }
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    alert(`Docena entregada satisfactoriamente al aparador.`)
+                    location.reload();
+                }else{
+                    alert(data.error)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                alert(`Lo sentimos pero a sucedido un inconveniente, por 
+                    favor revise que los campos requeridos sean correctos 
+                    e intentelo nuevamente, si el error persiste recargue
+                    la pagina.`)
+                $('#modalFormDelivery').modal('show');
+            })
+        }
     }
-  </script>
+</script>
 {% endblock javascripts %}

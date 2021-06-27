@@ -2,20 +2,22 @@
 
 {% block title %} Modelos {% endblock %}
 
-{% block navigation %}
-  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item text-capitalize active" aria-current="page">Modelos</li>
-    </ol>
-  </nav>
-{% endblock navigation %}
-
 {% load change_comma_to_dot %}
 
+{% block navigation %}
+<nav aria-label="breadcrumb" role="navigation" class="mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item text-capitalize active" aria-current="page">
+            Modelos
+        </li>
+    </ol>
+</nav>
+{% endblock navigation %}
+
 {% block content %}
-    {% if entity %}
+    {% if models %}
     <div class="row">
-        {% for model in entity %}
+        {% for model in models %}
         <div class="col-12 col-sm-4 col-md-3">
             <div class="card text-white bg-dark mb-0" style="min-height: 10rem;">
                 <div class="card-body pt-2">
@@ -27,11 +29,6 @@
                                 rel="tooltip" class="text-white">
                                 <i class="material-icons" >add</i>
                             </a>
-                            {% comment %} <a href="{% url 'dozens.show' model.name 'todos' %}"
-                                data-toggle="tooltip" data-placement="top" title="Ver sus docenas"
-                                rel="tooltip" class="text-white">
-                                <i class="material-icons">add</i>
-                            </a> {% endcomment %}
                         </div>
                     </div>
                     <div class="card-text d-flex flex-row justify-content-between">
@@ -43,7 +40,7 @@
                             </h6>
                         {% endfor %}
                         </div>
-                        {% if not request.user.is_superuser %}
+                        {% if user.is_superuser %}
                         <div>
                             <b class="pb-4"># Precios </b>
                             {% for size in model.all_your_sizes %}

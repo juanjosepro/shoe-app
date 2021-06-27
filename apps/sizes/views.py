@@ -12,6 +12,7 @@ def index(request):
         'sizes': sizes,
         'form':SizesForm(),
     }
+
     return render(request, 'pages/sizes/index.html', data)
 
 
@@ -23,9 +24,11 @@ def store(request):
         if form_size.is_valid():
             form_size.save()
             messages.success(request, 'Talla creada satisfactoriamente')
+
             return redirect(to='sizes.index')
         
-        messages.error(request, 'No se pudo crear intentelo de nuevo')
+        messages.error(request, 'No se pudo crear intentelo nuevamente')
+
         return redirect(to='sizes.index')
 
 
@@ -40,10 +43,12 @@ def update(request, id):
         if form_size.is_valid():
             form_size.save()
             messages.success(request, 'Talla actualizada satisfactoriamente')
+
             return redirect(to='sizes.index')
         
         data['form'] = form_size
         messages.success(request, 'No se pudo actualizar esta talla')
+        
         return redirect(to='sizes.index')
 
     return render(request, 'pages/sizes/update.html', data)

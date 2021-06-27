@@ -6,7 +6,7 @@ from .views import store_and_update_rematadoras_dozen
 
 urlpatterns = [
     #Route from the aparadores
-    path('procesos/aparador/<filter>/',
+    path('procesos-de-aparado-filtrado-por/<filter>/',
         all_aparador_processes,
         name='processes.aparador.index'),
     path('agregar-docena-a-produccion/',
@@ -16,14 +16,15 @@ urlpatterns = [
         update_aparador_dozen,
         name='processes.aparador.update'),
     
-    #Route from the aparadores
-    path('procesos/armador/<filter>/',
+    #Route from the armadores
+    path('procesos-de-armado-filtrado-por/<filter>/',
         all_armador_processes,
         name='processes.armador.index'),
     path('actualizar-docena-del-armador-a-finalizado/<id>/',
         update_armador_dozen,
         name='processes.aparador.update'),
 
+    #Route from the rematadores
     path('actualizar-docena-con-el-estado-produccion-finalizada/<id>/',
         store_and_update_rematadoras_dozen,
         name='processes.rematadora.store.and.update'),

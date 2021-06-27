@@ -5,7 +5,11 @@ from django.http import Http404, JsonResponse
 from apps.user.models import User
 from apps.dozens.models import Dozen
 from apps.dozens.models import DozensOfAparadores, DozensOfArmadores
-from apps.dozens.forms import DozensOfAparadoresForm, DozensOfArmadoresForm, DozensOfRematadorasForm
+from apps.dozens.forms import (
+    DozensOfAparadoresForm,
+    DozensOfArmadoresForm,
+    DozensOfRematadoresForm,
+)
 import json
 
 
@@ -13,106 +17,113 @@ import json
 def all_aparador_processes(request, filter):
     statuses = DozensOfAparadores.statuses_choices
     processes = None
+    filter = filter.strip()
 
-    if filter.strip() == 'todos':
-        processes = DozensOfAparadores.objects.all().order_by('-created_at')
-    if filter.strip() == 'aparado-en-produccion':
-        processes = DozensOfAparadores.objects.filter(
-            status='produccion').order_by('-created_at')
-    if filter.strip() == 'aparado-completado':
-        processes = DozensOfAparadores.objects.filter(
-            status='finalizado').order_by('-created_at')
+    if filter == "todos":
+        processes = DozensOfAparadores.objects.all().order_by("-created_at")
+    if filter == "aparado-en-produccion":
+        processes = DozensOfAparadores.objects.filter(status="produccion").order_by(
+            "-created_at"
+        )
+    if filter == "aparado-finalizado":
+        processes = DozensOfAparadores.objects.filter(status="finalizado").order_by(
+            "-created_at"
+        )
 
-    page = request.GET.get('page', 1)
+    page = request.GET.get("page", 1)
 
     try:
-        paginator = Paginator(processes, 16)
+        paginator = Paginator(processes, 25)
         processes = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'entity': processes,
-        'paginator': paginator,
-        'statuses': statuses,
-        'filter_by': filter,
+        "entity": processes,
+        "paginator": paginator,
+        "statuses": statuses,
+        "filter_by": filter,
     }
 
-    return render(request, 'pages/processes/all_aparador_processes.html', data)
+    return render(request, "pages/processes/all_aparador_processes.html", data)
 
 
 @login_required(login_url="/login/")
 def all_armador_processes(request, filter):
     statuses = DozensOfArmadores.statuses_choices
     processes = None
+    filter = filter.strip()
 
-    if filter.strip() == 'todos':
-        processes = DozensOfArmadores.objects.all().order_by('-created_at')
-    if filter.strip() == 'armado-en-produccion':
-        processes = DozensOfArmadores.objects.filter(
-            status='produccion').order_by('-created_at')
-    if filter.strip() == 'armado-completado':
-        processes = DozensOfArmadores.objects.filter(
-            status='finalizado').order_by('-created_at')
+    if filter == "todos":
+        processes = DozensOfArmadores.objects.all().order_by("-created_at")
+    if filter == "armado-en-produccion":
+        processes = DozensOfArmadores.objects.filter(status="produccion").order_by(
+            "-created_at"
+        )
+    if filter == "armado-finalizado":
+        processes = DozensOfArmadores.objects.filter(status="finalizado").order_by(
+            "-created_at"
+        )
 
-    page = request.GET.get('page', 1)
+    page = request.GET.get("page", 1)
 
     try:
-        paginator = Paginator(processes, 16)
+        paginator = Paginator(processes, 25)
         processes = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'entity': processes,
-        'paginator': paginator,
-        'statuses': statuses,
-        'filter_by': filter,
+        "entity": processes,
+        "paginator": paginator,
+        "statuses": statuses,
+        "filter_by": filter,
     }
 
-    return render(request, 'pages/processes/all_armador_processes.html', data)
+    return render(request, "pages/processes/all_armador_processes.html", data)
 
 
 @login_required(login_url="/login/")
 def store(request):
     data = json.loads(request.body.decode("utf-8"))
 
-    if request.method == 'POST':
-        dozen = get_object_or_404(Dozen, id=data['dozen'])  # id = id
-        user = User.objects.get(id=data['user'])  # id = id
+    if request.method == "POST":
+        dozen = get_object_or_404(Dozen, id=data["dozen"].strip())  # id = id
+        user = User.objects.get(id=data["user"].strip())  # id = id
 
-        isAparador, isArmador = False, False
-        formulario = None
+        is_aparador, is_armador = False, False
+        form_process = None
 
         if user.groups.filter(name="aparadores").exists():
-            isAparador = True
+            is_aparador = True
         elif user.groups.filter(name="armadores").exists():
-            isArmador = True
+            is_armador = True
 
         dataForm = {
-            'dozen': dozen.id,
-            'user': user.id,
-            'status': 'produccion', #for table dozen_of_rematadoras not exists field status
-            'note': data['note'],
+            "dozen": dozen.id,
+            "user": user.id,
+            "status": "produccion",  # for table dozen_of_rematadoras not exists field status
+            "note": data["note"].strip(),
         }
 
-        if isAparador:
-            formulario = DozensOfAparadoresForm(data=dataForm)
-        elif isArmador:
-            formulario = DozensOfArmadoresForm(data=dataForm)
-        
-        if formulario.is_valid():
-            formulario.save()
-            msg = {'success': 'Docena entregada correctamente'}
-            if isAparador:
-                dozen.status = 'aparado_en_produccion'
-            elif isArmador:
-                dozen.status = 'armado_en_produccion'
+        if is_aparador:
+            form_process = DozensOfAparadoresForm(data=dataForm)
+        elif is_armador:
+            form_process = DozensOfArmadoresForm(data=dataForm)
+
+        if form_process.is_valid():
+            form_process.save()
+            if is_aparador:
+                dozen.status = "aparado_en_produccion"
+            elif is_armador:
+                dozen.status = "armado_en_produccion"
             dozen.save()
+            msg = {"success": "Genial!. La docena a sido entregada satisfactoriamente."}
             return JsonResponse(msg)
         else:
-            print('error')
-            msg = {'error': 'No se pudo entregar la docena'}
+            msg = {
+                "error": "Error! No se pudo entregar la docena verifique que todos los campos requeridos sean correctos e intentelo nuevamente"
+            }
             return JsonResponse(msg)
 
 
@@ -120,35 +131,37 @@ def store(request):
 def update_aparador_dozen(request, id):
     data = json.loads(request.body.decode("utf-8"))
 
-    if request.method == 'POST':
-        process_aparador = get_object_or_404(DozensOfAparadores, id=id)  # id = id
-        isAparador = False
-
-        if process_aparador.user.groups.filter(name="aparadores").exists():
-            isAparador = True
+    if request.method == "POST":
+        process_aparador = get_object_or_404(
+            DozensOfAparadores, id=id.strip()
+        )  # id = id
 
         dataForm = {
-            'dozen': process_aparador.dozen.id,
-            'user': process_aparador.user.id,
-            'status': 'finalizado',
-            'note': data['note'],
+            "dozen": process_aparador.dozen.id,
+            "user": process_aparador.user.id,
+            "status": "finalizado",
+            "note": data["note"].strip(),
         }
 
-        if isAparador:
-            formulario = DozensOfAparadoresForm(data=dataForm, instance=process_aparador)
-        
+        if process_aparador.user.groups.filter(name="aparadores").exists():
+            formulario = DozensOfAparadoresForm(
+                data=dataForm, instance=process_aparador
+            )
+
             if formulario.is_valid():
                 formulario.save()
-                process_aparador.dozen.status = 'aparado_finalizado'
+                process_aparador.dozen.status = "aparado_finalizado"
                 process_aparador.dozen.save()
-                
-                msg = {'success': 'Docena entregada correctamente'}
+
+                msg = {"success": "Docena entregada correctamente"}
                 return JsonResponse(msg)
             else:
-                msg = {'error': 'No se pudo entregar la docena'}
-            return JsonResponse(msg)
-        
-        msg = {'error': 'No perteneces al grupo requerido para actualizar'}
+                msg = {"error": "No se pudo entregar la docena"}
+                return JsonResponse(msg)
+
+        msg = {
+            "error": "Error!. No perteneces al grupo de Aparadores por eso no puedes actualizar el estado de esta docena."
+        }
         return JsonResponse(msg)
 
 
@@ -156,67 +169,70 @@ def update_aparador_dozen(request, id):
 def update_armador_dozen(request, id):
     data = json.loads(request.body.decode("utf-8"))
 
-    if request.method == 'POST':
-        process_armador = get_object_or_404(DozensOfArmadores, id=id)  # id = id
-        isArmador = False
+    if request.method == "POST":
+        process_armador = get_object_or_404(DozensOfArmadores, id=id.strip())  # id = id
 
         if process_armador.user.groups.filter(name="armadores").exists():
-            isArmador = True
+            formulario = DozensOfArmadoresForm(
+                data={
+                    "dozen": process_armador.dozen.id,
+                    "user": process_armador.user.id,
+                    "status": "finalizado",
+                    "note": data["note"].strip(),
+                },
+                instance=process_armador,
+            )
 
-        if isArmador:
-            formulario = DozensOfArmadoresForm(data={
-                'dozen': process_armador.dozen.id,
-                'user': process_armador.user.id,
-                'status': 'finalizado',
-                'note': data['note'],
-            }, instance=process_armador)
-        
             if formulario.is_valid():
                 formulario.save()
-                process_armador.dozen.status = 'armado_finalizado'
+                process_armador.dozen.status = "armado_finalizado"
                 process_armador.dozen.save()
-                
-                msg = {'success': 'Esta docena a terminado el proceso de armado satisfactoriamente'}
+
+                msg = {
+                    "success": "Genial!. Esta docena a terminado el proceso de armado satisfactoriamente"
+                }
                 return JsonResponse(msg)
             else:
-                msg = {'error': 'No se pudo Actualizar la docena'}
-            return JsonResponse(msg)
-        
-        msg = {'error': 'No perteneces al grupo requerido para actualizar'}
+                msg = {"error": "Error!. No se pudo Actualizar la docena"}
+                return JsonResponse(msg)
+
+        msg = {
+            "error": "Error!. No perteneces al grupo de Armadores por eso no puedes actualizar el estado de esta docena."
+        }
         return JsonResponse(msg)
-
-
 
 
 @login_required(login_url="/login/")
 def store_and_update_rematadoras_dozen(request, id):
     data = json.loads(request.body.decode("utf-8"))
 
-    if request.method == 'POST':
-        dozen = get_object_or_404(Dozen, id=id)
-        user = get_object_or_404(User, id=data['user'])
-        isRematadora = False
+    if request.method == "POST":
+        dozen = get_object_or_404(Dozen, id=id.strip())
+        user = get_object_or_404(User, id=data["user"].strip())
 
         if user.groups.filter(name="rematadores").exists():
-            isRematadora = True
+            formulario = DozensOfRematadoresForm(
+                data={
+                    "dozen": dozen.id,
+                    "user": user.id,
+                    "note": data["note"].strip(),
+                }
+            )
 
-        if isRematadora:
-            formulario = DozensOfRematadorasForm(data={
-                'dozen': dozen.id,
-                'user': user.id,
-                'note': data['note'],
-            })
-        
             if formulario.is_valid():
                 formulario.save()
-                dozen.status = 'produccion_finalizada'
+                dozen.status = "produccion_finalizada"
                 dozen.save()
-                
-                msg = {'success': 'Esta docena a terminado todo el proceso de produccion satisfactoriamente'}
+
+                msg = {
+                    "success": "Esta docena a terminado todo el proceso de produccion satisfactoriamente"
+                }
                 return JsonResponse(msg)
             else:
-                msg = {'error': 'No se pudo Actualizar la docena'}
-            return JsonResponse(msg)
-        
-        msg = {'error': 'No perteneces al grupo requerido para actualizar'}
+                msg = {"error": "No se pudo Actualizar la docena"}
+                return JsonResponse(msg)
+
+        msg = {
+            "error": "Error!. No perteneces al grupo de Rematadores por eso no puedes actualizar el estado de esta docena."
+        }
         return JsonResponse(msg)

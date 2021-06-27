@@ -12,7 +12,7 @@ class ModelForm(forms.ModelForm):
                 raise forms.ValidationError('Este modelo ya existe')
             elif self.instance.pk != model.pk:
                 raise forms.ValidationError(
-                    'Cambio no permitido el modelo ya existe')
+                    'Cambio no permitido, el modelo ya existe')
         except Model.DoesNotExist:
             pass
         return self.cleaned_data['name']

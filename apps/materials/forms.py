@@ -1,6 +1,7 @@
 from django import forms
 from .models import Material
 
+
 class MaterialForm(forms.ModelForm):
 
     def clean_name(self):
@@ -15,6 +16,7 @@ class MaterialForm(forms.ModelForm):
         except Material.DoesNotExist:
             pass
         return self.cleaned_data['name']
+
     class Meta:
         model = Material
         fields = '__all__'

@@ -1,139 +1,139 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Docenas {% endblock %}
+{% block title %} Realizar ventas {% endblock %}
 
 {% block stylesheets %}
     <link
-      href="/static/assets/css/plugins/responsive.dataTables.min.css"
-      rel="stylesheet"
+        href="/static/assets/css/plugins/responsive.dataTables.min.css"
+        rel="stylesheet"
     />
 {% endblock stylesheets %}
 
 {% block navigation %}
-  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+<nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item text-capitalize active" aria-current="page">Docenas para la venta</li>
+        <li class="breadcrumb-item text-capitalize active" aria-current="page">
+            Docenas para la venta
+        </li>
     </ol>
-  </nav>
+</nav>
 {% endblock navigation %}
 
 {% block content %}
-    {% if dozens %}
-    <div class="row">
-        <form  action="{% url 'sales.summary_of_selected_items' %}" method="POST" style="width:100%">
-            {% csrf_token %}
-            <div class="col">
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <button type="submit" class="btn btn-success btn-sm btn-block">
-                        <i class="material-icons mr-1">
-                        shopping_cart
-                        </i>Vender las docenas seleccionadas
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body pt-0">
-                        <div class="material-datatables">
-                            <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Seleccionar</th>
-                                        <th>ID</th>
-                                        <th>Categoria</th>
-                                        <th>Modelo</th>
-                                        <th>Talla</th>
-                                        <th>Color</th>
-                                        <th>Material</th>
-                                        <th>Estado</th>
-                                        <th class="text-right">Fecha de registro</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for dozen in dozens %}
-                                    <tr>
-                                        {% if dozen.status == "produccion_finalizada" %}
-                                        <td><input type="checkbox" name="dozens[]" value="{{ dozen.id }}" aria-label="Checkbox for following text input"></td>
-                                        {% else %}
-                                        <td><input type="checkbox" name="dozens[]" value="{{ dozen.id }}" disabled aria-label="Checkbox for following text input"></td>
-                                        {% endif %}
-                                        <td class="text-uppercase">{{ dozen.id }}</td>
-                                        <td class="text-uppercase">{{ dozen.model.category }}</td>
-                                        <td class="text-uppercase">{{ dozen.model }}</td>
-                                        <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
-                                        <td>{{ dozen.color }}</td>
-                                        <td>{{ dozen.material }}</td>
-                                        <td><span class="badge badge-pill badge-success">Disponible para la venta</span></td>
-                                        <td class="text-right">{{ dozen.updated_at }}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <!-- Modal -->
-        <div class="modal fade" id="modalFormDelivery" tabindex="-1" role="dialog" aria-labelledby="modalFormDelivery" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-uppercase font-weight-bold" id="modalFormDelivery">Entregar docena</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+{% if dozens %}
+<div class="row">
+    <form  action="{% url 'sales.summary_of_selected_items' %}" method="POST" style="width:100%">
+        {% csrf_token %}
+        <div class="col">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4">
+                    <button type="submit" class="btn btn-success btn-sm btn-block">
+                    <i class="material-icons mr-1">
+                    shopping_cart
+                    </i>Vender las docenas seleccionadas
                     </button>
                 </div>
-                    <div class="modal-body">
-                    <form>
-                        {% csrf_token %}
-                        <div class="form-group">
-                        <div><label for="model_readonly">Modelo*</label></div>
-                        <input type="text" name="dozen_name_model" id="model_readonly" readonly required class="form-control">
-                        <input type="hidden" name="dozen" id="id_dozen" readonly required class="form-control">
-                        <small id="dozen_error" class="text-danger"></small>
-                        </div>
-                        <div class="form-group">
-                        <label class="bmd-label-floating">Elija al aparador*</label>
-                        <select name="user" id="id_user" class="form-control" required>
-                            <option value="">------------</option>
-                            {% for aparador in aparadors %}
-                            <option value="{{aparador.id}}">{{aparador}}</option>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pt-0">
+                    <div class="material-datatables">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Seleccionar &nbsp; &nbsp;</th>
+                                    <th>ID &nbsp; &nbsp;</th>
+                                    <th>Categoria &nbsp; &nbsp;</th>
+                                    <th>Modelo &nbsp; &nbsp;</th>
+                                    <th>Talla &nbsp; &nbsp;</th>
+                                    <th>Color &nbsp; &nbsp;</th>
+                                    <th>Material &nbsp; &nbsp;</th>
+                                    <th>Estado</th>
+                                    <th class="text-right">Fecha de registro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for dozen in dozens %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="dozens[]" value="{{ dozen.id }}"
+                                        aria-label="Checkbox for following text input">
+                                    </td>
+                                    <td class="text-uppercase">{{ dozen.id }}</td>
+                                    <td class="text-uppercase">{{ dozen.model.category }}</td>
+                                    <td class="text-uppercase">{{ dozen.model }}</td>
+                                    <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
+                                    <td>{{ dozen.color }}</td>
+                                    <td>{{ dozen.material }}</td>
+                                    <td><span class="badge badge-pill badge-success">Disponible para la venta</span></td>
+                                    <td class="text-right">{{ dozen.updated_at }}</td>
+                                </tr>
                             {% endfor %}
-                        </select>
-                        <small id="user_error" class="text-danger"></small>
-                        </div>
-                        <div class="form-group">
-                        <label class="bmd-label-floating">Nota</label>
-                        <textarea name="note" rows="3" id="id_note" class="form-control"></textarea>
-                        <small id="note_error" class="text-danger"></small>
-                        </div>
-                    </form>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" onclick="delivery()" class="btn btn-success btn-block">
-                        Entregar Docena
-                    </button>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalFormDelivery" tabindex="-1" role="dialog" aria-labelledby="modalFormDelivery" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase font-weight-bold" id="modalFormDelivery">Entregar docena</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                <form>
+                    {% csrf_token %}
+                    <div class="form-group">
+                    <div><label for="model_readonly">Modelo*</label></div>
+                    <input type="text" name="dozen_name_model" id="model_readonly" readonly required class="form-control">
+                    <input type="hidden" name="dozen" id="id_dozen" readonly required class="form-control">
+                    <small id="dozen_error" class="text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                    <label class="bmd-label-floating">Elija al aparador*</label>
+                    <select name="user" id="id_user" class="form-control" required>
+                        <option value="">------------</option>
+                        {% for aparador in aparadors %}
+                        <option value="{{aparador.id}}">{{aparador}}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="user_error" class="text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                    <label class="bmd-label-floating">Nota</label>
+                    <textarea name="note" rows="3" id="id_note" class="form-control"></textarea>
+                    <small id="note_error" class="text-danger"></small>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" onclick="delivery()" class="btn btn-success btn-block">
+                    Entregar Docena
+                </button>
+                </div>
+            </div>
+        </div>
     </div>
-    {% else %}
-    <div class="loader">Loading...</div>
-    <h4 class="d-flex justify-content-center text-center text-muted">
-      No hay docenas disponibles actualmente para la venta
-    </h4>
-    {% endif %}
+</div>
+{% else %}
+<div class="loader">Loading...</div>
+<h4 class="d-flex justify-content-center text-center text-muted">
+    No hay docenas disponibles actualmente para la venta
+</h4>
+{% endif %}
 
 {% endblock content %}
 
 {% block javascripts %}
   <script src="/static/assets/js/plugins/jquery.dataTables.min.js"></script>
-  //datatable setting with paginate
   <script src="/static/assets/js/my-js/datatables-config.js"></script>
 
   <script>

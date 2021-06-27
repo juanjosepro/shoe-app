@@ -3,7 +3,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib.auth.models import User
 from .models import Dozen, DozensOfCortadores
-from .models import DozensOfAparadores, DozensOfArmadores, DozensOfRematadoras
+from .models import DozensOfAparadores, DozensOfArmadores, DozensOfRematadores
 
 class DozenCreateForm(forms.ModelForm):
     class Meta:
@@ -24,10 +24,14 @@ class DozenCreateForm(forms.ModelForm):
         
         #self.fields['size'].queryset = User.objects.filter(groups__name='cortadores')
         self.fields['material'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'selectpicker',
+            'data-style': 'btn btn-link',
+        })
+        self.fields['color'].widget.attrs.update({
+            'class': 'selectpicker',
+            'data-style': 'btn btn-link',
         })
         self.fields['note'].widget.attrs.update({
-            'class': 'form-control',
             'rows': '3',
         })
 
@@ -94,10 +98,10 @@ class DozensOfArmadoresForm(forms.ModelForm):
             'rows': '3',
         })
 
-class DozensOfRematadorasForm(forms.ModelForm):
+class DozensOfRematadoresForm(forms.ModelForm):
 
     class Meta:
-        model = DozensOfRematadoras
+        model = DozensOfRematadores
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):

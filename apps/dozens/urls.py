@@ -4,8 +4,8 @@ from .views import history_of_the_process_of_each_dozen
 
 
 urlpatterns = [
-    path('registrar-nueva-docena/<name>/', store, name='dozens.store'),
-    path('docenas-listas-para-vender/', dozens_ready_to_sell, name='dozens.dozens_ready_to_sell'),
+    path('registrar-nueva-docena-al-modelo/<name>/', store, name='dozens.store'),
+    path('docenas-disponibles-para-su-venta/', dozens_ready_to_sell, name='dozens.dozens_ready_to_sell'),
     path('docenas-disponibles-para-los-aparadores/',
         dozens_for_the_aparador,
         name='dozens.dozens_for_the_aparador'),
@@ -16,9 +16,9 @@ urlpatterns = [
         dozens_for_the_rematador,
         name='dozens.dozens_for_the_rematador'),
     path('mostrar-docenas-por/<filter>/', index, name='dozens.index'),
-    path('docenas/modelo/<name>/filtrado-por/<filter>/', show, name='dozens.show'),
+    path('docenas-pertenecientes-al-modelo/<name>/filtrado-por/<filter>/', show, name='dozens.show'),
     path('docenas/<id>/actualizar-docena/', update, name='dozens.update'),
-    path('buscar-docena-por-codigo/', search, name='dozens.search'),
+    path('buscar-docena-por-id/', search, name='dozens.search'),
     path('historia-del-proceso-de-cada-docena/<id>/',
         history_of_the_process_of_each_dozen,
         name='dozens.history_of_the_process_of_each_dozen'),

@@ -9,7 +9,7 @@ from django.contrib import messages
 
 @login_required(login_url="/login/")
 def index(request):
-    materials = Material.objects.all()
+    materials = Material.objects.all().order_by('-created_at')
     
     modified_material = []
     for material in materials:
@@ -17,6 +17,7 @@ def index(request):
             material.types = []
         else:
             material.types = material.types.split(',')
+
         modified_material.append(material)
 
     materials = modified_material
@@ -28,10 +29,11 @@ def index(request):
         materials = paginator.page(page)
     except:
         raise Http404
+
     data = {
         'entity': materials,
         'paginator': paginator,
-        'form': MaterialForm
+        'form': MaterialForm(),
     }
 
     if request.method == 'POST':
@@ -39,31 +41,40 @@ def index(request):
 
         #looks for empty fields of the form and ignores them
         for type in request.POST.getlist('types[]'):
-            if len(type.strip()) > 3:
+            if len(type.strip()) > 3: #must be more than 3 characters
                 types.append(type.strip())
-        
-        formulario = MaterialForm(data={
-            'name': request.POST['name'],
+
+        form = MaterialForm(data={
+            'name': request.POST['name'].strip(),
             'types': ",".join(types),
         })
 
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Material agregado satisfactoriamente')
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Material registrado satisfactoriamente')
             return redirect(to='materials.index')
         else:
-            data['form'] = formulario
-            messages.error(request, 'Error al crear el modelo')
+            data['form'] = form
+            messages.error(request, 'Error!. Lo sentimos no pudimos registrar\
+                este material, llene correctamente el formulario e intentelo nuevamente')
 
     return render(request, 'pages/materials/index.html', data)
 
 
 @login_required(login_url="/login/")
 def update(request, name):
-    material = get_object_or_404(Material, name = name)
+    material = get_object_or_404(Material, name = name.strip())
+
+    #important to turn it into a list to display the data and update it.
+    list_types = []
+    for type in material.types.split(','):
+        list_types.append(type.strip())
+
+    material.types = list_types
 
     data = {
         'form': MaterialForm(instance=material),
+        'material': material,
     }
 
     if request.method == 'POST':
@@ -75,7 +86,7 @@ def update(request, name):
                 types.append(type.strip())
 
         formulario = MaterialForm(data={
-            'name': request.POST['name'],
+            'name': request.POST['name'].strip(),
             'types': ",".join(types)
         }, instance=material)
         
@@ -85,14 +96,9 @@ def update(request, name):
             return redirect(to='materials.index')
         else:
             data['form'] = formulario
-            messages.error(request, 'Error no se pudo actualizar el modelo')
+            messages.error(request, 'Error no se pudo actualizar el modelo \
+                verifique que todos los campos del formulario sena correctos')
 
-    #important to turn it into a list to display the data and update it.
-    types = []
-    for type in material.types.split(','):
-        types.append(type.strip())
 
-    material.types = types    
-    data['material'] = material
 
     return render(request, 'pages/materials/update.html', data)

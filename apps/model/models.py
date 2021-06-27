@@ -5,48 +5,56 @@ from apps.sizes.models import Sizes
 
 
 class Model(models.Model):
-    
+
     category = models.ForeignKey(
-        Category, related_name='models',
+        Category,
+        related_name="models",
         on_delete=models.PROTECT,
-        verbose_name='Categoria',
-        help_text='Seleccione la categoria a la que pertenecerá este modelo',
+        verbose_name="Categoria",
     )
     name = models.CharField(
-        max_length=30,
+        max_length=15,
         unique=True,
-        verbose_name='Nombre',
-        help_text='Nombre del modelo',
+        verbose_name="Nombre del modelo",
     )
     sizes = models.ManyToManyField(
         Sizes,
-        through='SizesAndModels',
-        verbose_name='Tallas',
-        help_text='¿Que tallas va  a tener este modelo?',
+        through="SizesAndModels",
+        verbose_name="Tallas",
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Fecha de Creacion"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Fecha de Actualizacion"
+    )
 
     class Meta:
-        db_table = 'models'
+        db_table = "models"
 
     def __str__(self):
         return self.name
 
+
 class SizesAndModels(models.Model):
-    size = models.ForeignKey(Sizes, on_delete=PROTECT)
-    model = models.ForeignKey(Model,on_delete=PROTECT)
+    size = models.ForeignKey(Sizes, on_delete=PROTECT, verbose_name="Talla")
+    model = models.ForeignKey(Model, on_delete=PROTECT, verbose_name="Modelo")
     price = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        verbose_name='Precio',
-        help_text='Precio de este talla',
+        verbose_name="Précio",
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creacion')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualizacion')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de Creación",
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Fecha de Actualización",
+    )
 
     class Meta:
-        db_table = 'sizes_and_models_pivot'
+        db_table = "models_sizes"
 
     def __str__(self):
         return str(self.id)

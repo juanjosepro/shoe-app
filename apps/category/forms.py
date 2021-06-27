@@ -9,10 +9,10 @@ class CategoryForm(forms.ModelForm):
             category = Category.objects.get(
                 name__iexact=self.cleaned_data['name'].strip())
             if not self.instance.pk:
-                raise forms.ValidationError('Esta categoria ya existe')
+                raise forms.ValidationError('Esta categoría ya existe')
             elif self.instance.pk != category.pk:
                 raise forms.ValidationError(
-                    'Cambio no permitido la categoria ya existe')
+                    'Cambio no permitido, la categoría ya existe')
         except Category.DoesNotExist:
             pass
         return self.cleaned_data['name']

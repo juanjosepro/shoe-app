@@ -2,94 +2,102 @@
 
 {% block title %} Agregar Docena {% endblock %}
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% load crispy_forms_tags %}
 
 {% block navigation %}
-  <nav aria-label="breadcrumb" role="navigation" class="mt-3">
+<nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item text-capitalize"><a href="javascript:;">Modelo {{model}}</a></li>
-      <li class="breadcrumb-item text-capitalize active" aria-current="page">Agregar docena</li>
+        <li class="breadcrumb-item text-capitalize">
+            <a href="javascript:;">Registrar nueva docena al modelo</a>
+        </li>
+        <li class="breadcrumb-item text-capitalize active" aria-current="page">
+            {{model}}
+        </li>
     </ol>
-  </nav>
+</nav>
 {% endblock navigation %}
 
 {% block content %}
-  <div class="row justify-content-center">
+<div class="row justify-content-center">
     <div class="col-12 col-sm-12 col-md-6">
         <div class="card">
             <div class="card-header border-bottom">
-                <h5 class="card-title font-weight-bold text-uppercase"> Registrar nueva docena</h5>
+                <h5 class="card-title font-weight-bold text-uppercase">
+                    Registrar nueva docena
+                </h5>
             </div>
             <form action="{% url 'dozens.store' model.name %}" method="POST">
             {% csrf_token %}
-            <div class="card-body">
-              <div>
-                <div class="row">
-                  <div class="col-12">
-                    <div class="form-group">
-                      <div><label for="id_model">Modelo*</label></div>
-                      <input type="text" name="model_name" id="id_model"
-                        readonly value="{{model.name}}" class="form-control text-uppercase">
-                      <input type="hidden" name="model" value="{{model.id}}">
-                      <div class="row">
-                        <div class="col-12 col-sm-6">
-                          {% for error in form.category.errors %}
-                          <small class="form-text text-danger font-weight-bold"
-                            >{{ error }}</small
-                          >
-                          {% endfor %}
+                <div class="card-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div><label for="id_model">Modelo*</label></div>
+                                    <input type="text" name="model_name" id="id_model"
+                                    readonly value="{{model.name}}" class="form-control text-uppercase">
+                                    <input type="hidden" name="model" value="{{model.id}}">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6">
+                                            {% for error in form.category.errors %}
+                                            <small class="form-text text-danger font-weight-bold">
+                                                {{ error }}
+                                            </small>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        <div class="form-group">
+                            <label for="id_user">Elija al cortador de esta docena*</label>
+                            <select name="user" id="id_user" class="form-control selectpicker"
+                                data-style="btn btn-link" required>
+                                <option value="">----------</option>
+                                {% for cortador in cortadors %}
+                                <option value="{{cortador.id}}">
+                                    {{cortador.first_name}} {{cortador.last_name}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            {% if error_user %}
+                            <small class="form-text text-danger font-weight-bold">
+                                {{ error_user }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_size">Elija la talla*</label>
+                            <select name="size" id="id_size" class="form-control selectpicker"
+                                 data-style="btn btn-link" required>
+                                <option value="">---------</option>
+                                {% for size in model.all_your_sizes %}
+                                <option value="{{size.id}}">{{size.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    {% for error in form.size.errors %}
+                                    <small class="form-text text-danger font-weight-bold">
+                                        {{ error }}
+                                    </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {{form | crispy}}
+                        <div class="form-group">
+                            <label for="id_note_user">¿Desea dejar alguna nota?</label>
+                            <textarea name="note_user" id="id_note_user" rows="3" class="form-control"></textarea>
+                        </div>
                     </div>
-                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="id_user">Elija al cortador de esta docena*</label>
-                  <select name="user" id="id_user" class="form-control" required>
-                    <option value="">----------</option>
-                    {% for cortador in cortadors %}
-                      <option value="{{cortador.id}}">{{cortador.first_name}} {{cortador.last_name}}</option>
-                    {% endfor %}
-                  </select>
-                  <small class="form-text text-danger font-weight-bold">
-                  {% if error_user %}
-                    {{ error_user }}
-                  {% endif %}
-                  </small>
+                <div class="card-footer border-top mt-3">
+                    <button type="submit" class="btn btn-success btn-block">Registrar Docena</button>
                 </div>
-                <div class="form-group">
-                  <label for="id_size">Elija la talla*</label>
-                  <select name="size" id="id_size" class="form-control" required>
-                    <option value="">---------</option>
-                    {% for size in model.all_your_sizes %}
-                      <option value="{{size.id}}">{{size.name}}</option>
-                    {% endfor %}
-                  </select>
-                  <small class="form-text text-danger font-weight-bold">
-                  {% if error_user %}
-                    {{ error_user }}
-                  {% endif %}
-                  </small>
-                </div>
-                {{form | crispy}}
-                <div class="form-group">
-                  <label for="id_note_user">¿Desea dejar alguna nota?</label>
-                  <textarea name="note_user" id="id_note_user" rows="3" class="form-control"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer border-top mt-3">
-                <button type="submit" class="btn btn-success btn-block">Registrar Docena</button>
-            </div>
-          </form>
+            </form>
         </div>
     </div>
-  </div>
+</div>
 
 {% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}

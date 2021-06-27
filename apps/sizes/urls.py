@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, store ,update
+from .views import index, store, update
 
 urlpatterns = [
     path('tallas/', index, name='sizes.index'),

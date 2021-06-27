@@ -3,6 +3,6 @@ from .views import index, store, update
 
 urlpatterns = [
     path('categorias/', index, name='categories.index'),
-    path('categorias/crear/', store, name='categories.store'),
-    path('categoria/<name>/actualizar/', update, name='categories.update'),
+    path('crear-nueva-categoria/', store, name='categories.store'),
+    path('actualizar-categoria/<name>/', update, name='categories.update'),
 ]

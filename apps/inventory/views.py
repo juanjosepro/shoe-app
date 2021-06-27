@@ -8,9 +8,9 @@ from django.db.models.functions import TruncDay
 from django.db.models import Count
 from django.db.models import Q
 from .models import Inventory
-from .forms import InventoryForm, UpdateStockForm
-
+from .forms import InventoryForm, UpdateStockForm, ReadonlyForm
 from datetime import datetime, timedelta
+
 
 # not WORNIG...
 @login_required(login_url="/login/")
@@ -61,16 +61,17 @@ def store(request, name):
                 'note': request.POST['note'],
             })
         else:
-            messages.error(request, 'A sucedido un error inesperado por fabor intentelo nuevamente')
+            messages.error(request, 'A sucedido un error inesperado por favor \
+                    recargue la página e intentelo nuevamente')
             return redirect(to='inventory.show', name=material.name)
 
         if formulario.is_valid():
             formulario.save()
-            messages.success(request, 'Material agregado satisfactoriamente')
+            messages.success(request, 'Material agregado al inventario satisfactoriamente')
             return redirect(to='inventory.show', name=material.name)
         else:
             data['form'] = formulario
-            messages.error(request, 'Error al crear')
+            messages.error(request, 'Error!. Por favor verifique que todos los campos sean correctos')
 
     return render(request, 'pages/inventory/create.html', data)
 
@@ -84,7 +85,7 @@ def show(request, name):
     page = request.GET.get('page', 1)
 
     try:
-        paginator = Paginator(inventory, 15)
+        paginator = Paginator(inventory, 25)
         inventory = paginator.page(page)
     except:
         raise Http404
@@ -99,25 +100,26 @@ def show(request, name):
 
 @login_required(login_url="/login/")
 def filter(request, name, filter):
-    material = get_object_or_404(Material, name=name)
+    material = get_object_or_404(Material, name=name.strip())
+    filter = filter.strip()
 
     if filter == 'todos':
         # filter = id of material
         inventory = Inventory.objects.filter(
             material_id=material.id).order_by('-created_at')
     if filter == 'disponibles':
-        #param = amount >= 1
-        inventory = Inventory.objects.filter(Q(amount__gte=1) & Q(
+        #param = stock >= 1
+        inventory = Inventory.objects.filter(Q(stock__gte=1) & Q(
             material_id=material.id)).order_by('-created_at')
     if filter == 'agotados':
-        #param = amount <= 0
+        #param = stock <= 0
         inventory = Inventory.objects.filter(stock__lte=0) & Inventory.objects.filter(
             material_id=material.id).order_by('-created_at')
 
     page = request.GET.get('page', 1)
 
     try:
-        paginator = Paginator(inventory, 15)
+        paginator = Paginator(inventory, 25)
         inventory = paginator.page(page)
     except:
         raise Http404
@@ -132,46 +134,19 @@ def filter(request, name, filter):
 
 
 @login_required(login_url="/login/")
-def update(request, id):
-    inventory = get_object_or_404(Inventory, id=id)
-
-    types = []
-    if inventory.material.types:
-        for type in inventory.material.types.split(','):
-            types.append(type.strip())
+def readonly(request, id):
+    inventory = get_object_or_404(Inventory, id=id.strip())
 
     data = {
-        'form': InventoryForm(instance=inventory),
-        'material_types': types,
+        'form': ReadonlyForm(instance=inventory),
         'inventory': inventory  # for the navigation route
     }
-
-    if request.method == 'POST':
-        formulario = InventoryForm(data={
-            'material': inventory.material.id,
-            'provider': request.POST['provider'],
-            'type': request.POST['type'],
-            'amount': request.POST['amount'],
-            'stock': request.POST['amount'],#same as the amount when registering
-            'color': request.POST['color'],
-            'price': request.POST['price'],
-            'note': request.POST['note'],
-        }, instance=inventory)
-        if formulario.is_valid():
-            formulario.save()
-            messages.success(request, "Actualizado satisfactoriamente")
-
-            return redirect(to='inventory.show', name=inventory.material.name)
-        else:
-            data['form'] = formulario
-            messages.error(request, "Error al actualizar")
-
-    return render(request, 'pages/inventory/update.html', data)
+    return render(request, 'pages/inventory/readonly.html', data)
 
 
 @login_required(login_url="/login/")
 def update_stock(request, id):
-    inventory = get_object_or_404(Inventory, id=id)
+    inventory = get_object_or_404(Inventory, id=id.strip())
 
     date = inventory.created_at
     print(date)
@@ -185,16 +160,8 @@ def update_stock(request, id):
     else:
         print('no lo son')
 
-
-    types = []
-
-    if inventory.material.types:
-        for type in inventory.material.types.split(','):
-            types.append(type.strip())
-
     data = {
         'form': UpdateStockForm(instance=inventory),
-        'material_types': types,
         'inventory': inventory  # for the navigation route
     }
     if request.method == 'POST':
