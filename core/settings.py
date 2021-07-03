@@ -109,9 +109,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zowpprpupq964lae',
-        'USER': 'mgdub46xqzsxir1p',
-        'PASSWORD': 's95hcc5qpp2yaqbl',
+        'NAME': 'hg9493gd8x1ky48f',
+        'USER': 'q4ny0if9b9hs1g1n',
+        'PASSWORD': 'wijdrjaxoldlof6u',
         'HOST': 'pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         'PORT': '3306',
     }
