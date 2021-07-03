@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shoe_app',
@@ -103,6 +103,17 @@ DATABASES = {
         'PASSWORD': 'eloisa08',
         'HOST': 'localhost',
         'PORT': '',
+    }
+} """
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'zowpprpupq964lae',
+        'USER': 'mgdub46xqzsxir1p',
+        'PASSWORD': 's95hcc5qpp2yaqbl',
+        'HOST': 'pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 

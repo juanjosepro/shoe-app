@@ -25,5 +25,5 @@ staticfiles/*
 !staticfiles/.gitkeep 
 .vscode/symbols.json
 
-.idea
-.vscode
+.idea/
+.vscode/
