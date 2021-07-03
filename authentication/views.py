@@ -23,11 +23,15 @@ def login_view(request):
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
+
             if user is not None:
-                login(request, user)
-                return redirect("/")
+                if user.is_superuser:
+                    login(request, user)
+                    return redirect("/")
+                else:
+                    msg = 'Usted no cuenta con los permisos para acceder al sistema'
             else:    
-                msg = 'Credenciales invalidas'    
+                msg = 'Credenciales invalidas'
         else:
             msg = 'Error al validar el formulario'    
 

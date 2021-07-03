@@ -57,8 +57,14 @@
                             {% for dozen in dozens %}
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="dozens[]" value="{{ dozen.id }}"
-                                        aria-label="Checkbox for following text input">
+                                        <div class="form-check">
+                                          <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="dozens[]" value="{{ dozen.id }}">
+                                            <span class="form-check-sign">
+                                              <span class="check"></span>
+                                            </span>
+                                          </label>
+                                        </div>
                                     </td>
                                     <td class="text-uppercase">{{ dozen.id }}</td>
                                     <td class="text-uppercase">{{ dozen.model.category }}</td>

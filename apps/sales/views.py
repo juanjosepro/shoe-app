@@ -149,7 +149,7 @@ def confirm_selected_items(request):
             return render(request, "pages/sales/create.html", data)
         else:
             messages.info(
-                request, "Es necesario que seleccione al menos una docena para su venta"
+                request, "Intentelo nuevamente!!!. Es necesario que seleccione al menos una docena para su venta"
             )
             return redirect(to="dozens.dozens_ready_to_sell")
 

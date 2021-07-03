@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include  # add this
+from django.urls import path, include # add this
 
 urlpatterns = [
     path('admin/', admin.site.urls),          # Django admin route
@@ -14,5 +14,5 @@ urlpatterns = [
     path("", include("apps.processes.urls")),
     path("", include("apps.sizes.urls")),
     path("", include("apps.urls")),            # UI Kits Html files
-
+    path("", include('pwa.urls')),
 ]

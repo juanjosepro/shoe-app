@@ -13,7 +13,7 @@
   <div class="sidebar-wrapper">
     <div class="user">
       <div class="photo">
-        <img src="https://appsrv1-147a1.kxcdn.com/material-dashboard-pro/img/faces/avatar.jpg" />
+        <img src="/static/assets/img/profile.png" />
       </div>
       <div class="user-info">
         <a data-toggle="collapse" href="#collapseExample" class="username">
@@ -24,12 +24,6 @@
         </a>
         <div class="collapse" id="collapseExample">
           <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/page-user.html">
-                <span class="sidebar-mini"> MP </span>
-                <span class="sidebar-normal"> Mi Perfil </span>
-              </a>
-            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">
                 <span class="sidebar-mini"> CS </span>
@@ -66,7 +60,7 @@
         {% if url_name == 'dozens.dozens_for_the_armador' %} active {% endif %}"
       >
         <a class="nav-link" data-toggle="collapse" href="#manage-dozens" aria-expanded="true">
-          <i class="material-icons">card_travel</i>
+          <i class="material-icons">admin_panel_settings</i>
           <p>Gestion de Docenas
             <b class="caret"></b>
           </p>
@@ -117,7 +111,7 @@
         {% if url_name == 'processes.armador.index' %} active {% endif %}"
       >
         <a class="nav-link" data-toggle="collapse" href="#process" aria-expanded="true">
-          <i class="material-icons">card_travel</i>
+          <i class="material-icons"> account_tree </i>
           <p>Procesos
             <b class="caret"></b>
           </p>
@@ -144,7 +138,7 @@
         {% if url_name == 'customers.show' %} active {% endif %}"
       >
         <a class="nav-link" data-toggle="collapse" href="#customers-and-providers" aria-expanded="true">
-          <i class="material-icons">card_travel</i>
+          <i class="material-icons">contacts</i>
           <p>Clientes/Proveedores
             <b class="caret"></b>
           </p>
@@ -171,7 +165,7 @@
         {% if url_name == 'sales.index' %} active {% endif %}"
       >
         <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
-          <i class="material-icons">card_travel</i>
+          <i class="material-icons">storefront</i>
           <p>Ventas
             <b class="caret"></b>
           </p>
@@ -214,12 +208,6 @@
               </a>
             </li>
             </li>
-            <li class="nav-item {% if url_name == 'inventory.index' %} active {% endif %}">
-              <a class="nav-link" href="{% url 'inventory.index' %}">
-                <span class="sidebar-mini"> INV </span>
-                <span class="sidebar-normal">Inventario</span>
-              </a>
-            </li>
             <li class="nav-item {% if url_name == 'dozens.dozens_ready_to_sell' %} active {% endif %}">
               <a class="nav-link" href="{% url 'dozens.dozens_ready_to_sell' %}">
                 <span class="sidebar-mini"> DPV </span>
@@ -229,69 +217,14 @@
           </ul>
         </div>
       </li>
-      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-        <a class="nav-link" href="/page-user.html">
-          <i class="material-icons">person</i>
-          <p>User Profile</p>
-        </a>
-      </li>
-      <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-notifications.html">
-          <i class="material-icons">notifications</i>
-          <p>Notifications</p>
-        </a>
-      </li>
       <li class="nav-item ">
         <a class="nav-link" href="{% url 'logout' %}" >
           <i class="material-icons">power_settings_new</i>
-          <p>Logout</p>
+          <p>Cerrar Sesión</p>
         </a>
       </li>
     </ul>
   </div>
   {% endif %}
-
-  {% block javascripts %}
-  <script>
-
-    {% comment %} function getProducts() {
-      return {
-        products: [],
-        getCookie: function(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        },
-        init: async function(){
-          const defaults = {
-              'method': 'GET',
-              'headers': new Headers({
-                'X-CSRFToken': this.getCookie('csrftoken'),
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-              }),
-          };
-
-          fetch('/productos/', defaults)
-            .then(response => response.json())
-            .then(data => {
-              this.products = data
-            });
-        }
-      }
-    } {% endcomment %}
-  </script>
-  {% endblock javascripts %}
 </div>
 {% endwith %}

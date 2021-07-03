@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="es-PE">
+<html lang="es">
+{% load pwa %}
   <head>
     <meta charset="utf-8" />
     <link
       rel="apple-touch-icon"
       sizes="76x76"
-      href="/static/assets/img/icon.png"
+      href="/static/assets/img/icon.ico"
     />
-    <link rel="icon" type="image/png" href="/static/assets/img/icon.png" />
+    <link rel="icon" type="image/ico" href="/static/assets/img/icon.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Shoe App - {% block title %}{% endblock %} | Pau</title>
+    <link crossorigin="use-credentials" rel="manifest" href="./manifest.json" />
+    {% progressive_web_app_meta %}
 
     <meta
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
@@ -70,28 +73,24 @@
           display: block;
       }
     </style>
+
     <!-- Specific Page CSS goes HERE  -->
     {% block stylesheets %}{% endblock stylesheets %}
   </head>
 
-  <body class="">
+  <body>
     <div class="wrapper">
       {% include 'includes/sidebar.html' %}
 
       <div class="main-panel">
         {% if messages %}
-        <div
-          class="row justify-content-center"
-          id="alert"
-          style="position: absolute; z-index: 2000; width: 100%"
-        >
-          <div class="col-12 col-sm-8 col-md-6 col-lg-6">
-            {% for msg in messages %}
-            <div class="alert {{msg.tags}} text-center" role="alert">
-              <b>{{ msg }}</b>
-            </div>
-            {% endfor %}
-          </div>
+        <div id="alert">
+          {% for msg in messages %}
+          <script>
+            let msg = "{{ msg }}";
+            let color = "{{ msg.tags }}";
+          </script>
+          {% endfor %}
         </div>
         {% endif %}
 
@@ -112,12 +111,13 @@
               {% block navigation %}{% endblock navigation %}
             </div>
             <button
-              class="navbar-toggler"
+              class="navbar-toggler position-absolute"
               type="button"
               data-toggle="collapse"
               aria-controls="navigation-index"
               aria-expanded="false"
               aria-label="Toggle navigation"
+              style="top:40px; right:10px"
             >
               <span class="sr-only">Toggle navigation</span>
               <span class="navbar-toggler-icon icon-bar"></span>
@@ -125,7 +125,7 @@
               <span class="navbar-toggler-icon icon-bar"></span>
             </button>
             {% if user.is_authenticated %}
-            <div class="collapse navbar-collapse justify-content-end">
+            <div class="collapse navbar-collapse justify-content-end d-none">
               <form class="navbar-form">
                 <div class="input-group no-border">
                   <input
@@ -226,11 +226,13 @@
     {% block javascripts %}{% endblock javascripts %}
 
     <script>
+      //['', 'info', 'danger', 'success', 'warning', 'rose', 'primary']
       setTimeout(() => {
         if ($("#alert").length > 0) {
+          md.showNotification('top','center', color, msg)
           $("#alert").remove();
         }
-      }, 3000);
+      }, 1000);
     </script>
   </body>
 </html>

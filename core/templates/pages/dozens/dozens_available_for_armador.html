@@ -30,14 +30,14 @@
               <thead>
                   <tr>
                       <th>ID &nbsp; &nbsp;</th>
-                      <th>Cortador</th>
-                      <th>Aparador</th>
-                      <th>Categoria</th>
                       <th>Modelo</th>
                       <th>Talla</th>
                       <th>Color</th>
                       <th>Material</th>
                       <th>Estado</th>
+                      <th>Categoria</th>
+                      <th>Cortador</th>
+                      <th>Aparador</th>
                       <th class="text-right">Fecha creación</th>
                       <th class="text-right">Acciones</th>
                   </tr>
@@ -46,14 +46,14 @@
               {% for dozen in dozens %}
                   <tr>
                       <td class="text-uppercase">{{ dozen.id }}</td>
-                      <td class="text-uppercase">{{ dozen.cortador.user.first_name }}</td>
-                      <td class="text-uppercase">{{ dozen.aparador.user.first_name }}</td>
-                      <td class="text-uppercase">{{ dozen.model.category }}</td>
                       <td class="text-uppercase">{{ dozen.model }}</td>
                       <td>{{ dozen.size }} <small class="text-muted">({{dozen.size.size}})</small></td>
                       <td>{{ dozen.color }}</td>
                       <td>{{ dozen.material }}</td>
                       <td><span class="badge badge-pill badge-success">Disponible</span></td>
+                      <td class="text-uppercase">{{ dozen.model.category }}</td>
+                      <td class="text-uppercase">{{ dozen.cortador.user.first_name }}</td>
+                      <td class="text-uppercase">{{ dozen.aparador.user.first_name }}</td>
                       <td class="text-right">{{ dozen.created_at }}</td>
                       <td class="td-actions text-right">
                         <a onclick="selectItem({{dozen.id}}, '{{dozen.model}}')"

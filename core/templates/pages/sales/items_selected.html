@@ -42,7 +42,16 @@
                                 {% for dozen in dozens %}
                                     <tr>
                                         {% if dozen.status == "produccion_finalizada" %}
-                                        <td><input type="checkbox" checked name="dozens[]" value="{{ dozen.id }}" aria-label="Checkbox for following text input"></td>
+                                        <td>
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input class="form-check-input" type="checkbox" checked name="dozens[]" value="{{ dozen.id }}">
+                                              <span class="form-check-sign">
+                                                <span class="check"></span>
+                                              </span>
+                                            </label>
+                                          </div>
+                                        </td>
                                         {% endif %}
                                         <td class="text-uppercase">{{ dozen.model.category }}</td>
                                         <td class="text-uppercase">{{ dozen.model }}</td>
