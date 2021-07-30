@@ -10,28 +10,29 @@ from django.db.models import Q
 from .models import Inventory
 from .forms import InventoryForm, UpdateStockForm, ReadonlyForm
 from datetime import datetime, timedelta
+from django.db.models import Sum
+from apps.materials.models import Material
 
-
-# not WORNIG...
 @login_required(login_url="/login/")
 def index(request):
-    inventory = Inventory.objects.annotate(day=TruncDay('created_at')).values(
-        'day', 'id', 'type', 'color').annotate(c=Count('id')).values('day', 'c').order_by('-created_at')
-    #inventory = Inventory.objects.all().order_by('-created_at')
-    for i in inventory:
-        print(i['day'])
-        print(i['c'])
-    """ page = request.GET.get('page', 1)
+    materials = Material.objects.all()
+    inventory = []
 
-    try:
-        paginator = Paginator(inventory, 40)
-        inventory = paginator.page(page)
-    except:
-        raise Http404 """
+    inventory = Inventory.objects.values('material_id', 'color', 'type') \
+    .annotate(Sum('stock')) \
+    .filter(stock__gte=1) \
+    .order_by()
+
+    new_data = []
+    for inv in inventory:
+        inv['material_name'] = Material.objects.get(id = inv['material_id'])
+        new_data.append(inv)
 
     data = {
-        'entity': inventory,
+        'materials': materials,
+        'inventory': new_data,
     }
+
     return render(request, 'pages/inventory/index.html', data)
 
 

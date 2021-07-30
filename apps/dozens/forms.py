@@ -33,6 +33,8 @@ class DozenCreateForm(forms.ModelForm):
         })
         self.fields['note'].widget.attrs.update({
             'rows': '3',
+            'class': 'pt-3 size-placeholder',
+            'placeholder': '\nejemplo: a esta docena le falta 3 pares de cinta color cafe porque no hay material',
         })
 
 

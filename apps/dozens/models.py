@@ -11,6 +11,7 @@ class Dozen(models.Model):
     material_choices = (
         ("cuero", "cuero"),
         ("gamusa", "gamusa"),
+        ("sin_especificar", "sin especificar"),
     )
     statuses_choices = (
         ("disponible", "disponible (1)"),
@@ -30,6 +31,7 @@ class Dozen(models.Model):
         ("blanco", "rojo"),
         ("azul", "azul"),
         ("rojo", "rojo"),
+        ("sin_especificar", "sin especificar"),
     )
 
     model = models.ForeignKey(
@@ -42,10 +44,10 @@ class Dozen(models.Model):
         max_length=30,
         choices=material_choices,
         default="cuero",
-        verbose_name="Material",
+        verbose_name="Elija el Material",
     )
     color = models.CharField(
-        max_length=30, choices=colors_choices, verbose_name="Color"
+        max_length=30, choices=colors_choices, verbose_name="Elija el Color"
     )
     status = models.CharField(
         max_length=30,
@@ -53,7 +55,7 @@ class Dozen(models.Model):
         default="disponible",
         verbose_name="Estado actual de la docena",
     )
-    note = models.TextField(max_length=250, blank=True, verbose_name="Nota")
+    note = models.TextField(max_length=250, blank=True, verbose_name="¿Desea agregar alguna nota sobre esta docena?")
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Fecha de creación"
     )

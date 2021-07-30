@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 {% load pwa %}
   <head>
     <meta charset="utf-8" />
@@ -71,6 +71,12 @@
           /* text-align: center; */
           display: block;
       }
+      @media (max-width: 576px) {
+          .hidden-mobile {
+            /*no working*/
+            display:none;
+          }
+      }
     </style>
 
     <!-- Specific Page CSS goes HERE  -->
@@ -124,7 +130,7 @@
               <span class="navbar-toggler-icon icon-bar"></span>
             </button>
             {% if user.is_authenticated %}
-            <div class="collapse navbar-collapse justify-content-end d-none">
+            <div class="collapse navbar-collapse justify-content-end d-none hidden-mobile">
               <form class="navbar-form">
                 <div class="input-group no-border">
                   <input
@@ -159,22 +165,16 @@
                     aria-expanded="false"
                   >
                     <i class="material-icons">notifications</i>
-                    <span class="notification">5</span>
+                    <span class="notification">1</span>
                     <p class="d-lg-none d-md-block">Some Actions</p>
                   </a>
                   <div
                     class="dropdown-menu dropdown-menu-right"
                     aria-labelledby="navbarDropdownMenuLink"
                   >
-                    <a class="dropdown-item" href="#"
-                      >Mike John responded to your email</a
-                    >
-                    <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                    <a class="dropdown-item" href="#"
-                      >You're now friend with Andrew</a
-                    >
-                    <a class="dropdown-item" href="#">Another Notification</a>
-                    <a class="dropdown-item" href="#">Another One</a>
+                    <a class="dropdown-item" href="#">
+                        Sin notificaciones
+                    </a>
                   </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -187,17 +187,17 @@
                     aria-expanded="false"
                   >
                     <i class="material-icons">person</i>
-                    <p class="d-lg-none d-md-block">Account</p>
+                    <p class="d-lg-none d-md-block">Cuenta</p>
                   </a>
                   <div
                     class="dropdown-menu dropdown-menu-right"
                     aria-labelledby="navbarDropdownProfile"
                   >
-                    <a class="dropdown-item" href="/page-user.html">Profile</a>
+                    <a class="dropdown-item" href="/page-user.html">Perfil</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'logout' %}"
-                      >Log out</a
-                    >
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                      Cerrar Sesión
+                    </a>
                   </div>
                 </li>
               </ul>

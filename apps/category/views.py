@@ -20,6 +20,7 @@ def index(request):
 @login_required(login_url="/login/")
 def store(request):
     if request.method == "POST":
+        print(request.POST)
         form_category = CategoryForm(data=request.POST)
 
         if form_category.is_valid():
@@ -29,9 +30,8 @@ def store(request):
             messages.error(
                 request, "Error al crear la categoria por favor intentelo nuevamente"
             )
-
-        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
-
+        
+    return redirect(to="categories.index")
 
 @login_required(login_url="/login/")
 def update(request, name):

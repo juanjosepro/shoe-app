@@ -17,12 +17,12 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
+#DEBUG = config('DEBUG', default=False, cast=bool)
 
 # load production server from .env
-#ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
-ALLOWED_HOSTS = ['shoe-app.juanjosepau.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+#ALLOWED_HOSTS = ['shoe-app.juanjosepau.com']
 
 # Message
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'pwa',
     'apps',
     'apps.sizes',
     'apps.category',
@@ -52,7 +53,6 @@ INSTALLED_APPS = [
     'apps.user',
     'crispy_forms',
     'core.templatetags.change_comma_to_dot',
-    'pwa',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -180,7 +180,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
 
 
-#PWA_SERVICE_WORKER_PATH = os.path.join(CORE_DIR, 'static/assets/js', 'serviceworker.js') 
+PWA_SERVICE_WORKER_PATH = os.path.join(CORE_DIR, 'static/assets/js', 'serviceworker.js')
 PWA_APP_NAME = 'Shoe App'
 PWA_APP_DESCRIPTION = "App para la administración de calzado"
 PWA_APP_THEME_COLOR = '#f44336'

@@ -47,14 +47,19 @@
     {% endif %}
     </div>
     <div class="col-12 col-sm-6 col-md-3 ml-auto">
-        <div class="dropdown show">
-            <a class="btn btn-default btn-block btn-sm dropdown-toggle" href="#" role="button"
-                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="btn-group btn-block">
+            <button
+                type="button"
+                class="btn btn-default btn-block btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
                 Filtrar por
-            </a>
+            </button>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="width:100%">
-            {% if type == 'cliente' %}
+            <div class="dropdown-menu" style="width:100%">
+            {% if type == 'clientes' %}
                 <a class="dropdown-item" href="{% url 'customers.show' type 'todos' %}">Todos</a>
                 <a class="dropdown-item" href="{% url 'customers.show' type 'activos' %}">Activos</a>
                 <a class="dropdown-item" href="{% url 'customers.show' type 'inactivos' %}">Inactivos</a>
@@ -113,18 +118,10 @@
                                 {% endif %}
                                 </td>
                                 <td class="text-right">
-                                {% if model.status == 'activo' %}
-                                    <span class="badge badge-pill badge-success px-3" style="font-size: 12px">
-                                        {{ model.status }}
-                                    </span>
-                                {% else %}
-                                    <span class="badge badge-pill badge-danger px-3" style="font-size: 12px">
-                                        {{ model.status }}
-                                    </span>
-                                {% endif %}
+                                    <b>{{model.status}}</b>
                                 </td>
                                 <td class="td-actions text-right">
-                                    {% if type == 'cliente' %}
+                                    {% if type == 'clientes' %}
                                         <a href="{% url 'customers.update' model.id %}"
                                             class="badge badge-pill badge-warning px-3 py-1">
                                             Editar

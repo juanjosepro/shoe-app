@@ -4,6 +4,14 @@
 
 {% load crispy_forms_tags %}
 
+{% block stylesheets %}
+    <style>
+        .size-placeholder::placeholder {
+            font-size: 12px;
+        }
+    </style>
+{% endblock stylesheets %}
+
 {% block navigation %}
 <nav aria-label="breadcrumb" role="navigation" class="mt-3">
     <ol class="breadcrumb">
@@ -72,7 +80,7 @@
                                  data-style="btn btn-link" required>
                                 <option value="">---------</option>
                                 {% for size in model.all_your_sizes %}
-                                <option value="{{size.id}}">{{size.name}}</option>
+                                <option value="{{size.id}}">{{size.name}} <em>({{size.size}})</em></option>
                                 {% endfor %}
                             </select>
                             <div class="row">
@@ -87,8 +95,8 @@
                         </div>
                         {{form | crispy}}
                         <div class="form-group">
-                            <label for="id_note_user">¿Desea dejar alguna nota?</label>
-                            <textarea name="note_user" id="id_note_user" rows="3" class="form-control"></textarea>
+                            <div><label for="id_note_user">¿Desea dejar algun comentario sobre esta docena?</label></div>
+                            <textarea name="note_user" id="id_note_user" rows="3" class="form-control size-placeholder" placeholder="ejemplo: Esta docena me tomo 1 hora de mas"></textarea>
                         </div>
                     </div>
                 </div>

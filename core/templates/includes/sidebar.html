@@ -41,6 +41,12 @@
           <p>Dashboard</p>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/">
+          <i class="material-icons">dashboard</i>
+          <p>Panel de Administración</p>
+        </a>
+      </li>
       <li class="nav-item {% if url_name == 'sizes.index' %} active {% endif %}">
         <a class="nav-link" href="{% url 'sizes.index' %}">
           <i class="material-icons">label_important</i>
@@ -59,7 +65,7 @@
         {% if url_name == 'dozens.dozens_for_the_aparador' %} active {% endif %}
         {% if url_name == 'dozens.dozens_for_the_armador' %} active {% endif %}"
       >
-        <a class="nav-link" data-toggle="collapse" href="#manage-dozens" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#manage-dozens" aria-expanded="false">
           <i class="material-icons">admin_panel_settings</i>
           <p>Gestion de Docenas
             <b class="caret"></b>
@@ -110,7 +116,7 @@
         {% if url_name == 'processes.aparador.index' %} active {% endif %}
         {% if url_name == 'processes.armador.index' %} active {% endif %}"
       >
-        <a class="nav-link" data-toggle="collapse" href="#process" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#process" aria-expanded="false">
           <i class="material-icons"> account_tree </i>
           <p>Procesos
             <b class="caret"></b>
@@ -137,7 +143,7 @@
         {% if url_name == 'providers.show' %} active {% endif %}
         {% if url_name == 'customers.show' %} active {% endif %}"
       >
-        <a class="nav-link" data-toggle="collapse" href="#customers-and-providers" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#customers-and-providers" aria-expanded="false">
           <i class="material-icons">contacts</i>
           <p>Clientes/Proveedores
             <b class="caret"></b>
@@ -145,13 +151,13 @@
         </a>
         <div class="collapse" id="customers-and-providers">
           <ul class="nav">
-            <li class="nav-item {% if url_name == 'providers.show' %} active {% endif %}">
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'providers.show' 'proveedores' 'todos' %}">
                 <span class="sidebar-mini"> P </span>
                 <span class="sidebar-normal">Proveedores</span>
               </a>
             </li>
-            <li class="nav-item {% if url_name == 'customers.show' %} active {% endif %}">
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'customers.show' 'clientes' 'todos' %}">
                 <span class="sidebar-mini"> C </span>
                 <span class="sidebar-normal">Clientes</span>
@@ -164,7 +170,7 @@
         {% if url_name == 'dozens.index' %} active {% endif %}
         {% if url_name == 'sales.index' %} active {% endif %}"
       >
-        <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="false">
           <i class="material-icons">storefront</i>
           <p>Ventas
             <b class="caret"></b>
@@ -193,7 +199,7 @@
         {% if url_name == 'inventory.index' %} active {% endif %}
         {% if url_name == 'dozens.dozens_ready_to_sell' %} active {% endif %}"
       >
-        <a class="nav-link" data-toggle="collapse" href="#inventory" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#inventory" aria-expanded="false">
           <i class="material-icons">fact_check</i>
           <p>Inventario
             <b class="caret"></b>
@@ -205,6 +211,12 @@
               <a class="nav-link" href="{% url 'materials.index' %}">
                 <span class="sidebar-mini"> MAT </span>
                 <span class="sidebar-normal">Materiales</span>
+              </a>
+            </li>
+            <li class="nav-item {% if url_name == 'inventory.index' %} active {% endif %}">
+              <a class="nav-link" href="{% url 'inventory.index' %}">
+                <span class="sidebar-mini"> INV </span>
+                <span class="sidebar-normal">Inventario</span>
               </a>
             </li>
             </li>
