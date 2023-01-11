@@ -94,18 +94,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-""" DATABASES = {
+# mysql://root:vE0kjmIAVPVQl9BSs0Hv@containers-us-west-102.railway.app:7129/railway
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shoe_app',
+        'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'eloisa08',
-        'HOST': 'localhost',
-        'PORT': '',
+        'PASSWORD': 'vE0kjmIAVPVQl9BSs0Hv',
+        'HOST': 'containers-us-west-102.railway.app',
+        'PORT': '7129',
     }
-} """
-
+}
+""" 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -116,7 +116,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
+ """
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
